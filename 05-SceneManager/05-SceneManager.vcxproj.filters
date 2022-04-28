@@ -109,6 +109,9 @@
     <ClCompile Include="Portal.cpp">
       <Filter>Map Objects\Others</Filter>
     </ClCompile>
+    <ClCompile Include="Koopas.cpp">
+      <Filter>Map Objects\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -179,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="Portal.h">
       <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopas.h">
+      <Filter>Map Objects\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

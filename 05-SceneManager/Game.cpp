@@ -440,14 +440,20 @@ void CGame::ProcessKeyboard()
 
 void CGame::_ParseSection_SETTINGS(string line)
 {
+	int scene_width;
+	int scene_height;
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
 	if (tokens[0] == "start")
 		current_scene = atoi(tokens[1].c_str());
+	else if (tokens[0] == "width")
+		scene_width = atoi(tokens[1].c_str());
+	else if (tokens[0] == "height")
+		scene_height = atoi(tokens[1].c_str());
 	else
 		DebugOut(L"[ERROR] Unknown game setting: %s\n", ToWSTR(tokens[0]).c_str());
-}
+} 
 
 void CGame::_ParseSection_SCENES(string line)
 {
@@ -508,7 +514,7 @@ void CGame::Load(LPCWSTR gameFile)
 	SwitchScene(current_scene);
 }
 
-void CGame::SwitchScene(int scene_id)
+void CGame::SwitchScene(int scene_id )
 {
 	if (dynamic_cast<CPlayScene*>(scenes[current_scene]))
 	{

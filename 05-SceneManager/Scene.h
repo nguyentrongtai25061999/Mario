@@ -20,10 +20,10 @@
 class CScene
 {
 protected:
-	CKeyEventHandler* key_handler;
-	int id;
+	CKeyEventHandler* key_handler=NULL;
+	int id=0;
 	bool isCameraAutoMove = false;
-	LPCWSTR sceneFilePath;
+	LPCWSTR sceneFilePath =NULL;
 	//CFont* fonts = NULL;
 
 public: 
@@ -47,7 +47,7 @@ typedef CScene * LPSCENE;
 class CSceneKeyHandler : public CKeyEventHandler
 {
 protected:
-	CScene* scene;
+	CScene* scene=NULL;
 
 public:
 	virtual void KeyState(BYTE* states) = 0;
