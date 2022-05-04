@@ -9,15 +9,13 @@ using namespace std;
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
-#include "Texture.h"
+#include "Textures.h"
 #include "KeyEventHandler.h"
 #include "Scene.h"
 
 #define MAX_FRAME_RATE 120
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
-
-
 
 /*
 	Our simple game framework
@@ -53,9 +51,8 @@ class CGame
 	ID3D10SamplerState* pPointSamplerState;
 
 	unordered_map<int, LPSCENE> scenes;
-	int current_scene;
+	int current_scene=0;
 	int next_scene = -1;
-
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
