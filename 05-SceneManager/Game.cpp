@@ -440,20 +440,14 @@ void CGame::ProcessKeyboard()
 
 void CGame::_ParseSection_SETTINGS(string line)
 {
-	int scene_width;
-	int scene_height;
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 2) return;
 	if (tokens[0] == "start")
-		current_scene = atoi(tokens[1].c_str());
-	else if (tokens[0] == "width")
-		scene_width = atoi(tokens[1].c_str());
-	else if (tokens[0] == "height")
-		scene_height = atoi(tokens[1].c_str());
+		next_scene = atoi(tokens[1].c_str());
 	else
 		DebugOut(L"[ERROR] Unknown game setting: %s\n", ToWSTR(tokens[0]).c_str());
-} 
+}
 
 void CGame::_ParseSection_SCENES(string line)
 {
@@ -511,32 +505,29 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
-	SwitchScene(current_scene);
+	SwitchScene();
 }
 
-void CGame::SwitchScene(int scene_id )
+void CGame::SwitchScene()
 {
-	if (dynamic_cast<CPlayScene*>(scenes[current_scene]))
-	{
-		//((CPlayScene*)scenes[current_scene])->BackUpPlayer();
+	if (next_scene < 0 || next_scene == current_scene) return;
 
-	}
-	DebugOut(L"[INFO] Switching to scene %d\n", pre_scene);
+	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+
 	scenes[current_scene]->Unload();
-
 
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 
-	current_scene = scene_id;
-	LPSCENE s = scenes[scene_id];
-	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+	current_scene = next_scene;
+	LPSCENE s = scenes[next_scene];
+	this->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
-	current_scene = scene_id;
+	next_scene = scene_id;
 }
 
 
