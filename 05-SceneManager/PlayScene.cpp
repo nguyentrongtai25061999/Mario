@@ -8,7 +8,6 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Coin.h"
-#include "Koopas.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -22,6 +21,26 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 }
 
 
+#define	INTROSCENE	0
+#define	WORLDSCENE	1
+#define	PLAYSCENE	2
+
+#define SCENE_SECTION_UNKNOWN		   -1
+#define SCENE_SECTION_TEXTURES			2
+#define SCENE_SECTION_SPRITES			3
+#define SCENE_SECTION_ANIMATIONS		4
+#define SCENE_SECTION_ANIMATION_SETS	5
+#define SCENE_SECTION_OBJECTS			6
+#define SCENE_SECTION_TILEMAP_DATA		7
+
+#define MAX_SCENE_LINE					1024
+
+void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
+{
+
+	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA done:: \n");
+
+}
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
@@ -56,20 +75,37 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	if (ani_id == 700) {
-	
-	}
-	for (unsigned int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
 		ani->Add(sprite_id, frame_time);
 	}
-	DebugOut(L"[INFO] _ParseSection_ANIMATIONS--> %s\n", ToWSTR(line).c_str());
 
 	CAnimations::GetInstance()->Add(ani_id, ani);
 }
+void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
+{
+	vector<string> tokens = split(line);
 
+	if (tokens.size() < 2) return; // skip invalid lines - an animation set must at least id and one animation id
+	int ani_set_id = atoi(tokens[0].c_str());
+	LPANIMATION_SET s;
+	if (CAnimationSets::GetInstance()->animation_sets[ani_set_id] != NULL)
+		s = CAnimationSets::GetInstance()->animation_sets[ani_set_id];
+	else
+		s = new CAnimationSet();
+	CAnimations* animations = CAnimations::GetInstance();
+
+	for (unsigned int i = 1; i < tokens.size(); i++)
+	{
+		int ani_id = atoi(tokens[i].c_str());
+
+		LPANIMATION ani = animations->Get(ani_id);
+		s->push_back(ani);
+	}
+	CAnimationSets::GetInstance()->Add(ani_set_id, s);
+}
 /*
 	Parse a line in section [OBJECTS]
 */
@@ -77,55 +113,117 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
-	// skip invalid lines - an object set must have at least id, x, y
-	if (tokens.size() < 2) return;
+	if (tokens.size() < 1) return;
 
-	int object_type = atoi(tokens[0].c_str());
-	float x = (float)atof(tokens[1].c_str());
-	float y = (float)atof(tokens[2].c_str());
+	wstring path = ToWSTR(tokens[0]);
 
-	CGameObject* obj = NULL;
+	LoadObjects(path.c_str());
 
-	switch (object_type)
-	{
-	case OBJECT_TYPE_MARIO:
-		if (player != NULL)
-		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
-
-		DebugOut(L"[INFO] Player object has been created!\n");
-		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(x, y); break;
-
-	case OBJECT_TYPE_PORTAL:
-	{
-		float r = (float)atof(tokens[3].c_str());
-		float b = (float)atof(tokens[4].c_str());
-		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
-	}
-	break;
-
-
-	default:
-		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
-		return;
-	}
-
-	// General object setup
-	obj->SetPosition(x, y);
-
-
-	objects.push_back(obj);
 }
 
+void CPlayScene::LoadObjects(LPCWSTR assetFile)
+{
+	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
+
+	ifstream f;
+	f.open(assetFile);
+	if (!f)
+		DebugOut(L"\nFailed to open object file!");
+
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE))
+	{
+		string line(str);
+		vector<string> tokens = split(line);
+
+		if (line[0] == '#') continue;
+		// skip invalid lines - an object set must have at least id, x, y
+		if (tokens.size() < 3) return;
+
+		int ani_set_id, tag = 0, option_tag_1 = 0, option_tag_2 = 0, option_tag_3 = 0;
+		int object_type = atoi(tokens[0].c_str());
+		float  x = 0, y = 0;
+		if (object_type != 999)
+		{
+			x = (float)atof(tokens[1].c_str());
+			y = (float)atof(tokens[2].c_str());
+
+			ani_set_id = (int)atoi(tokens[3].c_str());
+			if (tokens.size() >= 5)
+				tag = (int)atof(tokens[4].c_str());
+			if (tokens.size() >= 6)
+				option_tag_1 = (int)atof(tokens[5].c_str());
+			if (tokens.size() >= 7)
+				option_tag_2 = (int)atof(tokens[6].c_str());
+			if (tokens.size() >= 8)
+				option_tag_3 = (int)atof(tokens[7].c_str());
+		}
+
+		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+
+		CGameObject* obj = NULL;
+
+		switch (object_type)
+		{
+		case OBJECT_TYPE_MARIO:
+			if (player != NULL)
+			{
+				DebugOut(L"[ERROR] MARIO object was created before!\n");
+				return;
+			}
+			obj = new CMario(x, y);
+			player = (CMario*)obj;
+			DebugOut(L"[INFO] Player object created!\n", obj);
+			break;
+		case OBJECT_TYPE_GOOMBA:
+			/*obj = new CGoomba(tag);
+			obj->SetTag(tag);
+			obj->SetType(MOVING);*/
+			obj = new CGoomba(x, y);
+			break;
+		case OBJECT_TYPE_BRICK:
+			obj = new CBrick(x,y);
+			//obj->SetTag(tag);
+
+			break;
+		case OBJECT_TYPE_KOOPAS:
+			obj = new CKoopas(x, y);
+			break;
+		case OBJECT_TYPE_BLOCK:
+			//obj = new CBlock();
+			obj = new CBrick(x,y);
+
+			break;
+		case OBJECT_TYPE_COIN:
+			/*	obj = new CCoin(tag);
+				obj->SetType(IGNORE_DEFINE);*/
+			obj = new CBrick(x,y);
+
+			break;
+		case OBJECT_TYPE_PORTAL:
+		{
+			obj = new CBrick(x,y);
+
+			break;
+		}
+		default:
+			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+			return;
+		}
+		if (object_type != GRID)
+		{
+			// General object setup
+			obj->SetPosition(x, y);
+			objects.push_back(obj);
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			obj->SetAnimationSet(ani_set);
+		}
+	}
+
+	f.close();
+
+	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
+}
 
 void CPlayScene::Load()
 {
@@ -141,22 +239,20 @@ void CPlayScene::Load()
 	while (f.getline(str, MAX_SCENE_LINE))
 	{
 		string line(str);
-
 		if (line[0] == '#') continue;	// skip comment lines	
-
 
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
-		/*if (line == "[TILEMAP DATA]") {
+		if (line == "[TILEMAP DATA]") {
 			section = SCENE_SECTION_TILEMAP_DATA; continue;
-		}*/
+		}
 		if (line == "[ANIMATIONS]") {
 			section = SCENE_SECTION_ANIMATIONS; continue;
 		}
-		/*if (line == "[ANIMATION_SETS]") {
+		if (line == "[ANIMATION_SETS]") {
 			section = SCENE_SECTION_ANIMATION_SETS; continue;
-		}*/
+		}
 		if (line == "[OBJECTS]") {
 			section = SCENE_SECTION_OBJECTS; continue;
 		}
@@ -169,9 +265,9 @@ void CPlayScene::Load()
 		{
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
-			//case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
+		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-			//case SCENE_SECTION_TILEMAP_DATA: _ParseSection_TILEMAP_DATA(line); break;
+		case SCENE_SECTION_TILEMAP_DATA: _ParseSection_TILEMAP_DATA(line); break;
 		}
 	}
 
@@ -184,6 +280,9 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
+	CGame* game = CGame::GetInstance();
+	float cam_x, cam_y;
+	game->GetCamPos(cam_x, cam_y);
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
@@ -191,36 +290,55 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
+	player->Update(dt, &coObjects);
+
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
 
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
-
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
-
-	if (cx < 0) cx = 0;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
-
+	SetCam(cx, cy, dt);
 	PurgeDeletedObjects();
 }
+void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
+	float sw, sh, mw, mh, mx, my;
+	CGame* game = CGame::GetInstance();
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	sw = game->GetBackBufferWidth();
+	sh = game->GetBackBufferHeight() - 32;
+	mw = 432;
+	mh = 2816;
+	cx -= sw / 2;
+	// CamX
+	if (cx <= 0)//Left Edge
+		cx = 0;
+	if (cx >= mw - sw)//Right Edge
+		cx = mw - sw;
 
+	//CamY
+	if (isTurnOnCamY)
+		cy -= sh / 2;
+	else
+		//cy -= sh / 2;
+		cy = mh - sh;
+
+	if (cy <= 0)//Top Edge
+		cy = 0;
+	if (cy + sh >= mh)//Bottom Edge
+		cy = mh - sh;
+
+
+	game->SetCamPos(ceil(cx), ceil(cy));
+}
 void CPlayScene::Render()
 {
-	DebugOut(L"[INFO] Done render\n");
-	for (int i = 0; i < objects.size(); i++) {
-		DebugOut(L"[INFO] %d\n", i);
+	player->Render();
+	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	}
 }
 
 /*
