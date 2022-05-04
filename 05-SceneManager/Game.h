@@ -13,7 +13,7 @@ using namespace std;
 #include "KeyEventHandler.h"
 #include "Scene.h"
 
-#define MAX_FRAME_RATE 100
+#define MAX_FRAME_RATE 120
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
@@ -54,7 +54,7 @@ class CGame
 
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
-	int pre_scene = -1;
+	int next_scene = -1;
 
 
 	void _ParseSection_SETTINGS(string line);
@@ -109,7 +109,7 @@ public:
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void Load(LPCWSTR gameFile);
-	void SwitchScene(int scene_id);
+	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
 
 	void _ParseSection_TEXTURES(string line);
