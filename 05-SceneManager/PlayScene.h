@@ -6,6 +6,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "Map.h"
 #include "Koopas.h"
 //#include "Koopas.h"
 
@@ -15,6 +16,7 @@ class CPlayScene : public CScene
 protected:
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;
+	CMap* current_map = NULL;
 	int isTurnOnCamY = 0;
 
 	vector<LPGAMEOBJECT> objects;

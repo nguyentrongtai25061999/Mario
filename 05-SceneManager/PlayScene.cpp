@@ -38,6 +38,28 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 {
 
+	int ID, rowMap, columnMap, columnTile, rowTile, totalTiles;
+	LPCWSTR path = ToLPCWSTR(line);
+	ifstream f;
+	f.open(path);
+	f >> ID >> rowMap >> columnMap >> rowTile >> columnTile >> totalTiles;
+	//Init Map Matrix
+	int** TileMapData = new int* [rowMap];
+	for (int i = 0; i < rowMap; i++)
+	{
+		TileMapData[i] = new int[columnMap];
+		int j;
+		for (j = 0; j < columnMap; j++) {
+			f >> TileMapData[i][j];
+			//DebugOut(L"[INFO] _ParseSection_TILEMAP %d \n", TileMapData[i][j]);
+		}
+	}
+	f.close();
+
+	current_map = new CMap(ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
+	current_map->ExtractTileFromTileSet();
+	current_map->SetTileMapData(TileMapData);
+	//mapWidth = current_map->GetMapWidth();
 	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA done:: \n");
 
 }
@@ -310,8 +332,8 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	sw = game->GetBackBufferWidth();
 	sh = game->GetBackBufferHeight() - 32;
-	mw = 432;
-	mh = 2816;
+	mw = current_map->GetMapWidth();
+	mh = current_map->GetMapHeight();
 	cx -= sw / 2;
 	// CamX
 	if (cx <= 0)//Left Edge
@@ -331,12 +353,20 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 	if (cy + sh >= mh)//Bottom Edge
 		cy = mh - sh;
 
+	//Update CamY when Flying
+	//if (mario->isFlying || mario->isTailFlying)
+	//	isTurnOnCamY = true;
+	//else if (cy > mh - sh - 16)
+	//	isTurnOnCamY = false;
 
 	game->SetCamPos(ceil(cx), ceil(cy));
+	current_map->SetCamPos(cx, cy);
+	//hud->SetPosition(ceil(cx), ceil(cy + sh));
 }
 void CPlayScene::Render()
 {
 	player->Render();
+	current_map->DrawMap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
