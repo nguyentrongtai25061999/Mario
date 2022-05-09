@@ -43,11 +43,11 @@
     <Filter Include="Map Objects\Others">
       <UniqueIdentifier>{665d4b12-ec0d-4cfd-a389-63eea4fd8b9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map Objects\Player">
-      <UniqueIdentifier>{7a17b2a7-2c27-42d8-b260-83fe5838b707}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Map Objects\WorldMap">
+    <Filter Include="Map Objects\Items\WorldMap">
       <UniqueIdentifier>{755e4e7a-1df1-4dfe-9b73-ccaf15cb09ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\Items\Player">
+      <UniqueIdentifier>{7a17b2a7-2c27-42d8-b260-83fe5838b707}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,7 +79,7 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Mario.cpp">
-      <Filter>Map Objects\Player</Filter>
+      <Filter>Map Objects\Items\Player</Filter>
     </ClCompile>
     <ClCompile Include="Goomba.cpp">
       <Filter>Map Objects\Enemies</Filter>
@@ -139,7 +139,7 @@
       <Filter>Map Objects\Items</Filter>
     </ClInclude>
     <ClInclude Include="Mario.h">
-      <Filter>Map Objects\Player</Filter>
+      <Filter>Map Objects\Items\Player</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scenes</Filter>
