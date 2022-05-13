@@ -198,28 +198,45 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			DebugOut(L"[INFO] Player object created!\n", obj);
 			break;
 		case OBJECT_TYPE_GOOMBA:
-			/*obj = new CGoomba(tag);
-			obj->SetTag(tag);
-			obj->SetType(MOVING);*/
-			obj = new CGoomba(x, y);
+			///*obj = new CGoomba(tag);
+			//obj->SetTag(tag);
+			//obj->SetType(MOVING);
+			//break*/;
+			obj = new CBrick(x, y);
+
 			break;
 		case OBJECT_TYPE_BRICK:
-			obj = new CBrick(x,y);
+			obj = new CBrick();
 			//obj->SetTag(tag);
 
 			break;
+		//case OBJECT_TYPE_QUESTIONBRICK:
+			/*obj = new QuestionBrick(option_tag_1, option_tag_2);
+			break;*/
+			/*obj = new CBrick(x, y);
+
+			break;*/
 		case OBJECT_TYPE_KOOPAS:
-			obj = new CKoopas(x, y);
+			//obj = new CKoopas(tag);
+			//obj->SetTag(tag);
+			//((CKoopas*)obj)->start_tag = tag;
+			////obj->SetType(MOVING);
+			//((CKoopas*)obj)->start_x = x;
+			//((CKoopas*)obj)->start_y = y;
+			//break;
+			obj = new CBrick(x, y);
+
 			break;
 		case OBJECT_TYPE_BLOCK:
-			//obj = new CBlock();
-			obj = new CBrick(x,y);
+			/*obj = new CBlock(x, y);
+			break;*/
+			obj = new CBrick(x, y);
 
 			break;
 		case OBJECT_TYPE_COIN:
-			/*	obj = new CCoin(tag);
-				obj->SetType(IGNORE_DEFINE);*/
-			obj = new CBrick(x,y);
+			/*obj = new CCoin(tag);
+			break;*/
+			obj = new CBrick(x, y);
 
 			break;
 		case OBJECT_TYPE_PORTAL:

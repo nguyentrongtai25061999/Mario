@@ -106,6 +106,9 @@
     <ClCompile Include="Map.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -167,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Map Objects\Bricks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
