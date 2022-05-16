@@ -212,10 +212,7 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			obj = new CBlock(x, y);
 			break;
 		case OBJECT_TYPE_COIN:
-			/*obj = new CCoin(tag);
-			break;*/
-			obj = new CBrick(x, y);
-
+			obj = new CCoin(tag);
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{

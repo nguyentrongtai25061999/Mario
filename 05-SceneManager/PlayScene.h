@@ -7,17 +7,14 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Map.h"
-#include "Koopas.h"
-//#include "Koopas.h"
 
 
 class CPlayScene : public CScene
 {
 protected:
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;
+	CMario* player;
 	CMap* current_map = NULL;
-	int isTurnOnCamY = 0;
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -30,6 +27,7 @@ protected:
 	void LoadObjects(LPCWSTR assetFile);
 
 public:
+	bool isTurnOnCamY = false;
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
@@ -37,14 +35,16 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	virtual void SetCam(float cx, float cy, DWORD dt = 0);
-	void SetTurnOnCamY(bool isOn) {
-		isTurnOnCamY = isOn;
-	}
+	void SetTurnOnCamY(bool isOn) { isTurnOnCamY = isOn; }
 
-	LPGAMEOBJECT GetPlayer() { return player; }
+	CMario* GetPlayer() { return player; }
+	void SetPlayer(CMario* m) { player = m; }
 
 	void Clear();
 	void PurgeDeletedObjects();
+
+	void AddObject(LPGAMEOBJECT obj) { this->objects.push_back(obj); }
+	vector<LPGAMEOBJECT> GetObjects() { return this->objects; }
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };

@@ -352,6 +352,9 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 
+	/*void AddScore(float x, float y, int score, bool isStack = true);
+	void AddCoin() { this->coin++; }*/
+
 	int GetAniIdBig();
 	int GetAniIdSmall();
 
