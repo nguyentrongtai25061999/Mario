@@ -1,6 +1,6 @@
 #include <algorithm>
 #include "debug.h"
-
+#include "Block.h"
 #include "Mario.h"
 #include "Game.h"
 
@@ -24,7 +24,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-	isOnPlatform = false;
+	//isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -37,16 +37,25 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
-	}
-	else
-		if (e->nx != 0 && e->obj->IsBlocking())
+
+	if (!dynamic_cast<CBlock*>(e->obj)) {
+		if (e->ny != 0 && e->obj->IsBlocking())
 		{
-			vx = 0;
+			vy = 0;
+			ay = MARIO_GRAVITY;
+			if (e->ny < 0) {
+				isOnPlatform = true;
+				DebugOut(L"BLOCK");
+			}
 		}
+		else
+		{
+			if (e->nx != 0 && e->obj->IsBlocking())
+			{
+				vx = 0;
+			}
+		}
+	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
@@ -243,9 +252,6 @@ int CMario::GetAniIdBig()
 	if (state == MARIO_STATE_JUMP || state == MARIO_STATE_RELEASE_JUMP) {
 		if (nx > 0) {
 			aniId = MARIO_ANI_BIG_JUMPINGUP_RIGHT;
-			/*if (isFlying) {
-				ani = MARIO_ANI_BIG_FLY_RIGHT;
-			}*/
 			if (isHolding) {
 				aniId = MARIO_ANI_BIG_HOLD_JUMPINGUP_RIGHT;
 			}
@@ -257,9 +263,6 @@ int CMario::GetAniIdBig()
 		}
 		if (nx < 0) {
 			aniId = MARIO_ANI_BIG_JUMPINGUP_LEFT;
-			/*if (isFlying) {
-				ani = MARIO_ANI_SMALL_FLY_LEFT;
-			}*/
 			if (isHolding) {
 				aniId = MARIO_ANI_BIG_HOLD_JUMPINGUP_LEFT;
 			}
@@ -384,14 +387,10 @@ void CMario::Render()
 		if (nx > 0) {
 			aniId = MARIO_ANI_TRANSFORM_SMALL_RIGHT;
 		}
-		//else aniId = MARIO_ANI_TRANSFORM_SMALL_LEFT;
-	/*	if (level == MARIO_LEVEL_TAIL || isBangAni || level == MARIO_LEVEL_FIRE) {
-			aniId = MARIO_ANI_TRANSFORM_BANG;
-		}*/
 
 	}
 	if (isSitting) {
-		animation_set->at(aniId)->Render(x, y);
+		animation_set->at(aniId)->Render(x, y+5);
 	}
 
 	else {

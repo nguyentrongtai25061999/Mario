@@ -377,7 +377,7 @@ public:
 	{
 		return (state != MARIO_STATE_DIE);
 	}
-
+	boolean getIsOnPlatForm() { return isOnPlatform; }
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);

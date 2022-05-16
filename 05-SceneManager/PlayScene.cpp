@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "AssetIDs.h"
-
+#include "Block.h"
 #include "PlayScene.h"
 #include "Utils.h"
 #include "Textures.h"
@@ -198,40 +198,18 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			DebugOut(L"[INFO] Player object created!\n", obj);
 			break;
 		case OBJECT_TYPE_GOOMBA:
-			///*obj = new CGoomba(tag);
-			//obj->SetTag(tag);
-			//obj->SetType(MOVING);
-			//break*/;
 			obj = new CBrick(x, y);
 
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
-			//obj->SetTag(tag);
-
 			break;
-		//case OBJECT_TYPE_QUESTIONBRICK:
-			/*obj = new QuestionBrick(option_tag_1, option_tag_2);
-			break;*/
-			/*obj = new CBrick(x, y);
-
-			break;*/
 		case OBJECT_TYPE_KOOPAS:
-			//obj = new CKoopas(tag);
-			//obj->SetTag(tag);
-			//((CKoopas*)obj)->start_tag = tag;
-			////obj->SetType(MOVING);
-			//((CKoopas*)obj)->start_x = x;
-			//((CKoopas*)obj)->start_y = y;
-			//break;
 			obj = new CBrick(x, y);
 
 			break;
 		case OBJECT_TYPE_BLOCK:
-			/*obj = new CBlock(x, y);
-			break;*/
-			obj = new CBrick(x, y);
-
+			obj = new CBlock(x, y);
 			break;
 		case OBJECT_TYPE_COIN:
 			/*obj = new CCoin(tag);
@@ -369,16 +347,9 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 		cy = 0;
 	if (cy + sh >= mh)//Bottom Edge
 		cy = mh - sh;
-
-	//Update CamY when Flying
-	//if (mario->isFlying || mario->isTailFlying)
-	//	isTurnOnCamY = true;
-	//else if (cy > mh - sh - 16)
-	//	isTurnOnCamY = false;
-
 	game->SetCamPos(ceil(cx), ceil(cy));
 	current_map->SetCamPos(cx, cy);
-	//hud->SetPosition(ceil(cx), ceil(cy + sh));
+
 }
 void CPlayScene::Render()
 {

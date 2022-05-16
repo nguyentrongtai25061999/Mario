@@ -1,6 +1,7 @@
 #include "Collision.h"
 #include "GameObject.h"
-
+#include "Mario.h"
+#include "Block.h"
 #include "debug.h"
 
 #define BLOCK_PUSH_FACTOR 0.4f
@@ -239,6 +240,10 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	else
 	{
 		Filter(objSrc, coEvents, colX, colY);
+		float oLeft, oTop, oRight, oBottom;
+		float mLeft, mTop, mRight, mBottom;
+
+		objSrc->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 
 		float x, y, vx, vy, dx, dy;
 		objSrc->GetPosition(x, y);
@@ -335,6 +340,26 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 					y += dy;
 				}
 
+		for (UINT i = 0; i < coEvents.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEvents[i];
+			if (dynamic_cast<CMario*>(objSrc)) {
+				CMario* mario = dynamic_cast<CMario*>(objSrc);
+				e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
+				if (dynamic_cast<CBlock*>(e->obj)) {
+					if (e->nx != 0 && ceil(mBottom) != oTop)
+						x += dx;
+					if (e->ny < 0) {
+						mario->SetSpeed(vx, 0);
+						//mario->isOnPlatform = true;
+					}
+					if (e->ny > 0) {
+						y += dy;
+					}
+				}
+			}
+		}
+
 		objSrc->SetPosition(x, y);
 	}
 
@@ -346,7 +371,6 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		LPCOLLISIONEVENT e = coEvents[i];
 		if (e->isDeleted) continue;
 		if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
-
 		objSrc->OnCollisionWith(e);
 	}
 
