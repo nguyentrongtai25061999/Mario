@@ -198,8 +198,9 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			DebugOut(L"[INFO] Player object created!\n", obj);
 			break;
 		case OBJECT_TYPE_GOOMBA:
-			obj = new CBrick(x, y);
-
+			obj = new CGoomba(tag);
+			obj->SetTag(tag);
+			obj->SetType(MOVING);
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();

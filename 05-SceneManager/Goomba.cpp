@@ -66,14 +66,29 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CGoomba::Render()
 {
-	int aniId = GOOMBA_NORMAL_ANI_WALKING;
-	if (state == GOOMBA_STATE_DIE) 
+	int ani = 0;
+	switch (tag)
 	{
-		aniId = GOOMBA_NORMAL_ANI_DIE;
+	case GOOMBA_NORMAL:
+		ani = GOOMBA_NORMAL_ANI_WALKING;
+		if (state == GOOMBA_STATE_DIE)
+			ani = GOOMBA_NORMAL_ANI_DIE;
+		break;
+	case GOOMBA_RED:
+		ani = GOOMBA_RED_ANI_WINGSWALKING;
+		if (state == GOOMBA_STATE_RED_JUMPING || state == GOOMBA_STATE_RED_HIGHJUMPING)
+			ani = GOOMBA_RED_ANI_JUMPING;
+		if (state == GOOMBA_STATE_DIE_BY_MARIO)
+			ani = GOOMBA_RED_ANI_WALKING;
+		break;
+	case GOOMBA_RED_NORMAL:
+		ani = GOOMBA_RED_ANI_WALKING;
+		if (state == GOOMBA_STATE_DIE)
+			ani = GOOMBA_RED_ANI_DIE;
+		break;
 	}
-
-	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
-	RenderBoundingBox();
+	animation_set->at(ani)->Render(x, y);
+	//RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)
@@ -81,15 +96,30 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-		case GOOMBA_STATE_DIE:
-			die_start = GetTickCount64();
-			y += (GOOMBA_NORMAL_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2;
-			vx = 0;
-			vy = 0;
-			ay = 0; 
-			break;
-		case GOOMBA_STATE_WALKING: 
-			vx = -GOOMBA_WALKING_SPEED;
-			break;
+	case GOOMBA_STATE_DIE:
+		die_start = GetTickCount64();
+		y += GOOMBA_NORMAL_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE;
+		vx = 0;
+		vy = 0;
+		break;
+	case GOOMBA_STATE_DIE_BY_MARIO:
+		vy = -GOOMBA_DIE_DEFLECT_SPEED;
+		vx = -vx;
+		ay = GOOMBA_GRAVITY;
+		die_start = GetTickCount64();
+		break;
+	case GOOMBA_STATE_WALKING:
+		vx = -GOOMBA_WALKING_SPEED;
+		break;
+	case GOOMBA_STATE_RED_WINGSWALKING:
+		walkingTimer = GetTickCount64();
+		ay = GOOMBA_GRAVITY;
+		break;
+	case GOOMBA_STATE_RED_JUMPING:
+		ay = -GOOMBA_GRAVITY;
+		break;
+	case GOOMBA_STATE_RED_HIGHJUMPING:
+		ay = -GOOMBA_GRAVITY;
+		break;
 	}
 }
