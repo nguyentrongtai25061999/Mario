@@ -1,28 +1,29 @@
 #include "Goomba.h"
 
-CGoomba::CGoomba(float x, float y):CGameObject(x, y)
+CGoomba::CGoomba(int tag)
 {
 	this->ax = 0;
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
+	nx = -1;
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	if (state == GOOMBA_STATE_DIE)
 	{
-		left = x - GOOMBA_BBOX_WIDTH/2;
+		left = x - GOOMBA_NORMAL_BBOX_WIDTH /2;
 		top = y - GOOMBA_BBOX_HEIGHT_DIE/2;
-		right = left + GOOMBA_BBOX_WIDTH;
+		right = left + GOOMBA_NORMAL_BBOX_WIDTH;
 		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
 	}
 	else
 	{ 
-		left = x - GOOMBA_BBOX_WIDTH/2;
-		top = y - GOOMBA_BBOX_HEIGHT/2;
-		right = left + GOOMBA_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT;
+		left = x - GOOMBA_NORMAL_BBOX_WIDTH /2;
+		top = y - GOOMBA_NORMAL_BBOX_HEIGHT /2;
+		right = left + GOOMBA_NORMAL_BBOX_WIDTH;
+		bottom = top + GOOMBA_NORMAL_BBOX_HEIGHT;
 	}
 }
 
@@ -65,10 +66,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CGoomba::Render()
 {
-	int aniId = ID_ANI_GOOMBA_WALKING;
+	int aniId = GOOMBA_NORMAL_ANI_WALKING;
 	if (state == GOOMBA_STATE_DIE) 
 	{
-		aniId = ID_ANI_GOOMBA_DIE;
+		aniId = GOOMBA_NORMAL_ANI_DIE;
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y);
@@ -82,7 +83,7 @@ void CGoomba::SetState(int state)
 	{
 		case GOOMBA_STATE_DIE:
 			die_start = GetTickCount64();
-			y += (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2;
+			y += (GOOMBA_NORMAL_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE)/2;
 			vx = 0;
 			vy = 0;
 			ay = 0; 
