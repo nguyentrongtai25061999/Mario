@@ -102,8 +102,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	/*AddScore(this->x, this->y, 100, false);
-	AddCoin();*/
+	///*AddScore(this->x, this->y, 100, false);
+	//AddCoin();*/
 	coin++;
 }
 

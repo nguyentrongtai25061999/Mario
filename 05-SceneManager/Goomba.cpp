@@ -1,5 +1,6 @@
 #include "Goomba.h"
-
+#include "debug.h"
+#include "PlayScene.h"
 CGoomba::CGoomba(int tag)
 {
 	this->ax = 0;
@@ -9,21 +10,26 @@ CGoomba::CGoomba(int tag)
 	nx = -1;
 }
 
-void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == GOOMBA_STATE_DIE)
+	if (state == GOOMBA_STATE_DIE_BY_MARIO)
 	{
-		left = x - GOOMBA_NORMAL_BBOX_WIDTH /2;
-		top = y - GOOMBA_BBOX_HEIGHT_DIE/2;
-		right = left + GOOMBA_NORMAL_BBOX_WIDTH;
-		bottom = top + GOOMBA_BBOX_HEIGHT_DIE;
+		left = top = right = bottom = 0;
+		return;
 	}
+	left = x;
+	top = y;
+	right = x + GOOMBA_NORMAL_BBOX_WIDTH;
+	if (state == GOOMBA_STATE_DIE)
+		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
 	else
-	{ 
-		left = x - GOOMBA_NORMAL_BBOX_WIDTH /2;
-		top = y - GOOMBA_NORMAL_BBOX_HEIGHT /2;
-		right = left + GOOMBA_NORMAL_BBOX_WIDTH;
-		bottom = top + GOOMBA_NORMAL_BBOX_HEIGHT;
+		bottom = y + GOOMBA_NORMAL_BBOX_HEIGHT;
+	if (tag == GOOMBA_RED)
+	{
+		right = x + GOOMBA_RED_BBOX_WIDTH;
+		bottom = y + GOOMBA_RED_BBOX_WINGS_HEIGHT;
+		if (state == GOOMBA_STATE_RED_WINGSWALKING)
+			bottom = y + GOOMBA_RED_BBOX_HEIGHT;
 	}
 }
 
@@ -37,7 +43,6 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
-
 	if (e->ny != 0 )
 	{
 		vy = 0;
@@ -50,15 +55,15 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = currentScene->GetPlayer();
 	vy += ay * dt;
 	vx += ax * dt;
-
-	if ( (state==GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT) )
+	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
 	}
-
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
