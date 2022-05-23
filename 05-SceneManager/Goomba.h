@@ -52,7 +52,7 @@ protected:
 
 	ULONGLONG chasingTimer = -1;
 	ULONGLONG die_start = -1;
-	ULONGLONG walkingTimer = -1;
+	ULONGLONG walkingTimer = 0;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

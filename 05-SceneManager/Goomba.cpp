@@ -51,18 +51,29 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 			{
 				if (!walkingTimer)
 				{
+					//DebugOut(L"OnCollisionWith");
 					if (jumpingStacks == GOOMBA_RED_JUMPING_STACKS)
 					{
 						SetState(GOOMBA_STATE_RED_HIGHJUMPING);
 						jumpingStacks = -1;
+						y -= GOOMBA_RED_BBOX_WINGS_HEIGHT - GOOMBA_RED_BBOX_HEIGHT + 5; // 5 is a option can edit
+						//DebugOut(L"OnCollisionWith if 1========\n");
 					}
 					else
 					{
 						if (jumpingStacks == -1)
+						{
+							//DebugOut(L"OnCollisionWith if 2========\n");
 							SetState(GOOMBA_STATE_RED_WINGSWALKING);
+						}
 						else
+						{
 							SetState(GOOMBA_STATE_RED_JUMPING);
+							//DebugOut(L"OnCollisionWith else 2========\n");
+						}
+
 						jumpingStacks++;
+						//DebugOut(L"OnCollisionWith else 1========\n");
 					}
 				}
 				else
@@ -72,7 +83,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 				ay = GOOMBA_GRAVITY;
 		}
 	}
-	if (e->ny != 0 )
+	if (e->ny != 0)
 	{
 		vy = 0;
 	}
@@ -95,17 +106,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	if ((tag == GOOMBA_RED) && state != GOOMBA_STATE_DIE && state != GOOMBA_STATE_DIE_BY_MARIO)
 	{
-		if (GetTickCount64() - walkingTimer >= GOOMBA_RED_TIME_WALKING && walkingTimer)
-		{
-			//DebugOut(L"GOOMBA_RED);
-			walkingTimer = GetTickCount64();
-			jumpingStacks = 0;
-			y -= GOOMBA_RED_BBOX_WINGS_HEIGHT - GOOMBA_RED_BBOX_HEIGHT + 5; 
-			SetState(GOOMBA_STATE_RED_JUMPING);
-		}
 		if (GetTickCount64() - chasingTimer >= GOOMBA_RED_TIME_CHASING && chasingTimer)
 		{
-
+			//DebugOut(L"chasingtimer");
 			chasingTimer = 0;
 		}
 	}
@@ -172,7 +175,6 @@ void CGoomba::SetState(int state)
 		vx = -GOOMBA_WALKING_SPEED;
 		break;
 	case GOOMBA_STATE_RED_WINGSWALKING:
-		walkingTimer = GetTickCount64();
 		ay = GOOMBA_GRAVITY;
 		break;
 	case GOOMBA_STATE_RED_JUMPING:
