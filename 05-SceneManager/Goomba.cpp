@@ -42,7 +42,36 @@ void CGoomba::OnNoCollision(DWORD dt)
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	if (dynamic_cast<CBrick*>(e->obj)) {
+		if (e->ny != 0)
+		{
+			vy = 0;
+			if (e->ny < 0 && tag == GOOMBA_RED && state != GOOMBA_STATE_DIE)
+			{
+				if (!walkingTimer)
+				{
+					if (jumpingStacks == GOOMBA_RED_JUMPING_STACKS)
+					{
+						SetState(GOOMBA_STATE_RED_HIGHJUMPING);
+						jumpingStacks = -1;
+					}
+					else
+					{
+						if (jumpingStacks == -1)
+							SetState(GOOMBA_STATE_RED_WINGSWALKING);
+						else
+							SetState(GOOMBA_STATE_RED_JUMPING);
+						jumpingStacks++;
+					}
+				}
+				else
+					ay = GOOMBA_GRAVITY;
+			}
+			else if (e->ny > 0)
+				ay = GOOMBA_GRAVITY;
+		}
+	}
 	if (e->ny != 0 )
 	{
 		vy = 0;
