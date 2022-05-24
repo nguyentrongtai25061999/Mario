@@ -206,7 +206,7 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			obj = new CBrick();
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
-			obj = new CBrick();
+			obj = new QuestionBrick(option_tag_1);
 			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CBrick(x, y);

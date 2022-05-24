@@ -21,7 +21,7 @@ void QuestionBrick::Render() {
 		ani = QUESTION_BRICK_ANI_HIT;
 	}
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void QuestionBrick::OnNoCollision(DWORD dt)
@@ -50,7 +50,12 @@ void QuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	x += vx * dt;
 	y += vy * dt;
-	
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (state == QUESTION_BRICK_HIT) {
+		if (tag == ITEM_COIN_QUESTION_BRICK_COIN) {
+			CreateItem(tag);
+		}
+	}
 }
 
 void QuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b) {
@@ -59,6 +64,35 @@ void QuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b) {
 	r = x + 16;
 	b = y + 16;
 }
+void QuestionBrick::CreateItem(int itemType) {
+	this->obj = SetUpItem(itemType);
+	if (this->obj == NULL) {
+		return;
+	}
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	if (dynamic_cast<CCoin*>(this->obj)) {
+		CCoin* obj = dynamic_cast<CCoin*>(this->obj);
+		obj->SetAppear(true);
+		obj->SetPosition(x, y);
+		obj->SetState(COIN_STATE_UP);
+		obj->SetZIndex(-1);
+		currentScene->AddObject(obj);
+	}
+}
+CGameObject* QuestionBrick::SetUpItem(int itemType) {
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = currentScene->GetPlayer();
+	int ani_set_id = -1;
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	if (itemType == ITEM_COIN_QUESTION_BRICK_COIN) {
+		obj = new CCoin(COIN_TYPE_INBRICK);
+		ani_set_id = COIN_ANI_SET_ID;
+		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+		obj->SetAnimationSet(ani_set);
+	}
+	return obj;
+}
+
 void QuestionBrick::SetState(int state) {
 	CGameObject::SetState(state);
 	switch (state)

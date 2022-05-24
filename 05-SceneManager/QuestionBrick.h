@@ -2,18 +2,22 @@
 #include "GameObject.h"
 
 #define QUESTION_BRICK_NORMAL	0
-
 #define QUESTION_BRICK_ANI_NORMAL	0
 #define QUESTION_BRICK_HIT	1
 #define QUESTION_BRICK_ANI_HIT	1
 #define QUESTIONBRICK_SPEED		0.05f
+#define ITEM_COIN_QUESTION_BRICK_COIN	0
+#define COIN_ANI_SET_ID 6
+
 
 class QuestionBrick :public CGameObject
 {
+	LPGAMEOBJECT item;
 	int tag;
+	
 public:
 	CGameObject* obj = NULL;
-	QuestionBrick(int tag);
+	QuestionBrick(int tag = ITEM_COIN_QUESTION_BRICK_COIN);
 
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 1; };
@@ -27,6 +31,7 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetState(int state);
-
+	void CreateItem(int itemType = ITEM_COIN_QUESTION_BRICK_COIN);
+	CGameObject* SetUpItem(int itemType);
 	~QuestionBrick();
 };
