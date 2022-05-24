@@ -14,7 +14,7 @@ class QuestionBrick :public CGameObject
 {
 	LPGAMEOBJECT item;
 	int tag;
-	
+	int totalItems = 1;
 public:
 	CGameObject* obj = NULL;
 	QuestionBrick(int tag = ITEM_COIN_QUESTION_BRICK_COIN);

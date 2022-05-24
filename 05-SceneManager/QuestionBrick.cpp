@@ -84,6 +84,12 @@ CGameObject* QuestionBrick::SetUpItem(int itemType) {
 	CMario* mario = currentScene->GetPlayer();
 	int ani_set_id = -1;
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	if (totalItems >= 1) {
+		totalItems--;
+	}
+	else {
+		return NULL;
+	}
 	if (itemType == ITEM_COIN_QUESTION_BRICK_COIN) {
 		obj = new CCoin(COIN_TYPE_INBRICK);
 		ani_set_id = COIN_ANI_SET_ID;
