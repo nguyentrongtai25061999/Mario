@@ -3,7 +3,6 @@
 #include "Block.h"
 #include "Mario.h"
 #include "Game.h"
-
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
@@ -106,7 +105,6 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 	//AddCoin();*/
 	coin++;
 }
-
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;

@@ -8,7 +8,7 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Coin.h"
-
+#include"QuestionBrick.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -205,9 +205,11 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
 			break;
+		case OBJECT_TYPE_QUESTIONBRICK:
+			obj = new CBrick();
+			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CBrick(x, y);
-
 			break;
 		case OBJECT_TYPE_BLOCK:
 			obj = new CBlock(x, y);
