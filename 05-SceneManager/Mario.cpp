@@ -6,7 +6,7 @@
 #include "Goomba.h"
 #include "Coin.h"
 #include "Portal.h"
-
+#include "QuestionBrick.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -62,6 +62,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<QuestionBrick*>(e->obj))
+		OnCollisionWithQuestionBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -110,7 +112,16 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
+void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
+{
+	QuestionBrick* qBrick = dynamic_cast<QuestionBrick*>(e->obj);
 
+	// Hit from bottom
+	if (e->ny > 0) {
+		vy = 0;
+		qBrick->SetState(QUESTION_BRICK_HIT);
+	}
+}
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;

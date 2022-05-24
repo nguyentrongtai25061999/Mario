@@ -17,6 +17,9 @@ void QuestionBrick::Render() {
 	if (state == QUESTION_BRICK_NORMAL) {
 		ani = QUESTION_BRICK_ANI_NORMAL;
 	}
+	if (state == QUESTION_BRICK_HIT) {
+		ani = QUESTION_BRICK_ANI_HIT;
+	}
 	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
 }

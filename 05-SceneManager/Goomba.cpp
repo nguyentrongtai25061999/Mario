@@ -1,9 +1,11 @@
 #include "Goomba.h"
 #include "debug.h"
+#include "Brick.h"
 #include "PlayScene.h"
+#include "Mario.h"
 CGoomba::CGoomba(int tag)
 {
-	this->ax = 0;
+	this->ax = 0;//this o class nao la cai do
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
@@ -41,7 +43,7 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return; 
+	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CGoomba*>(e->obj)) return;
 	if (dynamic_cast<CBrick*>(e->obj)) {
 		if (e->ny != 0)
@@ -93,7 +95,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 }
 
-void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	CMario* mario = currentScene->GetPlayer();
@@ -108,10 +110,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		if (GetTickCount64() - chasingTimer >= GOOMBA_RED_TIME_CHASING && chasingTimer)
 		{
-			//DebugOut(L"chasingtimer");
+			DebugOut(L"chasingtimer");
 			chasingTimer = 0;
 		}
 	}
+	/* limit y*/
 	if (vy < -GOOMBA_JUMP_SPEED && state == GOOMBA_STATE_RED_JUMPING)
 	{
 		vy = -GOOMBA_JUMP_SPEED;
@@ -122,6 +125,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vy = -GOOMBA_HIGHJUMP_SPEED;
 		ay = GOOMBA_GRAVITY;
 	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
