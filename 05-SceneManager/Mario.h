@@ -352,6 +352,7 @@ class CMario : public CGameObject
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithMushRoom(LPCOLLISIONEVENT e);
 	/*void AddScore(float x, float y, int score, bool isStack = true);
 	void AddCoin() { this->coin++; }*/
 
@@ -390,4 +391,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	int GetLevel() {
+		return this->level;
+	}
 };

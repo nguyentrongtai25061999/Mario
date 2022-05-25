@@ -8,6 +8,7 @@
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "Collision.h"
+#include "MushRoom.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -64,6 +65,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<QuestionBrick*>(e->obj))
 		OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CMushRoom*>(e->obj))
+		OnCollisionWithMushRoom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -125,6 +128,12 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 		vy = 0;
 		qBrick->SetState(QUESTION_BRICK_HIT);
 	}
+}
+void CMario::OnCollisionWithMushRoom(LPCOLLISIONEVENT e)
+{
+	CMushRoom* mushRoom = dynamic_cast<CMushRoom*>(e->obj);
+	mushRoom->Delete();
+	SetLevel(MARIO_LEVEL_BIG);
 }
 int CMario::GetAniIdSmall()
 {
