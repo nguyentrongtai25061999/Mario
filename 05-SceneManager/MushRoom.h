@@ -5,6 +5,7 @@
 #define MUSHROOM_BBOX_HEIGHT 16
 #define MUSHROOM_SPEED 0.07f
 #define MUSHROOM_STATE_IDLE	0
+#define MUSHROOM_STATE_UP 6
 #define MUSHROOM_GRAVITY 0.2f
 
 class CMushRoom :public CGameObject
@@ -33,7 +34,7 @@ public:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	/*virtual void OnCollisionWith(LPCOLLISIONEVENT e);*/
 
 	CMushRoom(int type = 0);
 	~CMushRoom();

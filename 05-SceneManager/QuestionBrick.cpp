@@ -10,6 +10,7 @@
 QuestionBrick::QuestionBrick(int tag) : CGameObject() {
 	state = QUESTION_BRICK_NORMAL;
 	this->tag = tag;
+	this->item = NULL;
 }
 void QuestionBrick::Render() {
 	int ani = -1;
@@ -88,7 +89,7 @@ void QuestionBrick::CreateItem(int itemType) {
 		CMushRoom* obj = dynamic_cast<CMushRoom*>(this->obj);
 		obj->SetAppear(true);
 		obj->SetPosition(x, y);
-		//obj->SetState(COIN_STATE_UP);
+		obj->SetState(MUSHROOM_STATE_UP);
 		obj->SetZIndex(-1);
 		currentScene->AddObject(obj);
 		//DebugOut(L"Mushroom was created \n");
