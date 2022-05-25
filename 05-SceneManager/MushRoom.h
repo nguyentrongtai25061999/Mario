@@ -6,6 +6,8 @@
 #define MUSHROOM_SPEED 0.07f
 #define MUSHROOM_STATE_IDLE	0
 #define MUSHROOM_STATE_UP 6
+#define MUSHROOM_STATE_LEFT	-1
+#define MUSHROOM_STATE_RIGHT 1
 #define MUSHROOM_GRAVITY 0.2f
 
 class CMushRoom :public CGameObject
