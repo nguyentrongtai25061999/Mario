@@ -8,6 +8,8 @@
 #define QUESTIONBRICK_SPEED		0.05f
 #define ITEM_COIN_QUESTION_BRICK_COIN	0
 #define COIN_ANI_SET_ID 6
+#define ITEM_MUSHROOM_RED 3
+#define ITEM_MUSHROOM_ANI_SET_ID 37
 
 
 class QuestionBrick :public CGameObject

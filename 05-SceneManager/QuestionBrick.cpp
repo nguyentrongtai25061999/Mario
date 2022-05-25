@@ -3,9 +3,9 @@
 #include "Coin.h"
 #include "PlayScene.h"
 #include "Game.h"
-#include "Coin.h"
 #include "debug.h"
 #include "Mario.h"
+#include "MushRoom.h"
 
 QuestionBrick::QuestionBrick(int tag) : CGameObject() {
 	state = QUESTION_BRICK_NORMAL;
@@ -55,6 +55,10 @@ void QuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (tag == ITEM_COIN_QUESTION_BRICK_COIN) {
 			CreateItem(tag);
 		}
+		if (tag != ITEM_COIN_QUESTION_BRICK_COIN) {
+			CreateItem(tag);
+			DebugOut(L"Mushroom \n");
+		}
 	}
 }
 
@@ -67,6 +71,7 @@ void QuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b) {
 void QuestionBrick::CreateItem(int itemType) {
 	this->obj = SetUpItem(itemType);
 	if (this->obj == NULL) {
+		//DebugOut(L"Mushroom 1 \n");
 		return;
 	}
 	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
@@ -77,6 +82,16 @@ void QuestionBrick::CreateItem(int itemType) {
 		obj->SetState(COIN_STATE_UP);
 		obj->SetZIndex(-1);
 		currentScene->AddObject(obj);
+		//DebugOut(L"Coin was created \n");
+	}
+	if (dynamic_cast<CMushRoom*>(this->obj)) {
+		CMushRoom* obj = dynamic_cast<CMushRoom*>(this->obj);
+		obj->SetAppear(true);
+		obj->SetPosition(x, y);
+		//obj->SetState(COIN_STATE_UP);
+		obj->SetZIndex(-1);
+		currentScene->AddObject(obj);
+		//DebugOut(L"Mushroom was created \n");
 	}
 }
 CGameObject* QuestionBrick::SetUpItem(int itemType) {
@@ -97,6 +112,12 @@ CGameObject* QuestionBrick::SetUpItem(int itemType) {
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
 	}
+	if (itemType == ITEM_MUSHROOM_RED) {
+			obj = new CMushRoom();
+			ani_set_id = ITEM_MUSHROOM_ANI_SET_ID;
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			obj->SetAnimationSet(ani_set);
+		}
 	return obj;
 }
 

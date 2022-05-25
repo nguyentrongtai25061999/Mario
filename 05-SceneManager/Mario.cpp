@@ -44,7 +44,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 			ay = MARIO_GRAVITY;
 			if (e->ny < 0) {
 				isOnPlatform = true;
-				DebugOut(L"BLOCK");
+				//DebugOut(L"BLOCK");
 			}
 		}
 		else
