@@ -21,7 +21,7 @@ void QuestionBrick::Render() {
 		ani = QUESTION_BRICK_ANI_HIT;
 	}
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void QuestionBrick::OnNoCollision(DWORD dt)

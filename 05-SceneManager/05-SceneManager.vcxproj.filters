@@ -49,6 +49,9 @@
     <Filter Include="Map Objects\Items\Player">
       <UniqueIdentifier>{7a17b2a7-2c27-42d8-b260-83fe5838b707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Items\MushRoom">
+      <UniqueIdentifier>{5c8bf675-9a69-4588-93a3-07f05c38eff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -111,6 +114,9 @@
     </ClCompile>
     <ClCompile Include="QuestionBrick.cpp">
       <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
+    <ClCompile Include="MushRoom.cpp">
+      <Filter>Map Objects\Items\MushRoom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +185,9 @@
     </ClInclude>
     <ClInclude Include="QuestionBrick.h">
       <Filter>Map Objects\Bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="MushRoom.h">
+      <Filter>Map Objects\Items\MushRoom</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
