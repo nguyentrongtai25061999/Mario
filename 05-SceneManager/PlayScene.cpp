@@ -209,6 +209,10 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 		case OBJECT_TYPE_QUESTIONBRICK:
 			obj = new QuestionBrick(option_tag_1);
 			break;
+		case OBJECT_TYPE_PIRANHAPLANT:
+			obj = new PiranhaPlant();
+			obj->SetZIndex(-1);
+			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CBrick(x,y);
 			break;
@@ -358,6 +362,10 @@ void CPlayScene::Render()
 	current_map->DrawMap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	// sort object to render by Z
+	//sort(this->objects.begin(), this->objects.end(), [](const CGameObject* lObj, const CGameObject* rObj) {
+	//	return lObj->z < rObj->z;
+	//	});
 }
 	
 
