@@ -42,7 +42,7 @@ void PiranhaPlant::SetState(int _state)
 	switch (_state)
 	{
 		case PIRANHAPLANT_STATE_DARTING:
-			vy = PIRANHAPLANT_DARTING_SPEED;
+			vy = -PIRANHAPLANT_DARTING_SPEED;
 			break;
 		case PIRANHAPLANT_STATE_BITING:
 			vy = 0;

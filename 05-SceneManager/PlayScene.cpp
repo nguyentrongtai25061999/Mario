@@ -211,6 +211,7 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
 			obj = new PiranhaPlant();
+			((PiranhaPlant*)obj)->SetLimitY(y);
 			obj->SetZIndex(-1);
 			break;
 		case OBJECT_TYPE_KOOPAS:

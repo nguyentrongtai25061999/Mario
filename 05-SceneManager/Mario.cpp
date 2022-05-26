@@ -92,6 +92,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetState() != GOOMBA_STATE_DIE)
 			{
+				if (goomba->tag == GOOMBA_RED)
+					goomba->SetTag(GOOMBA_RED_NORMAL);
 				if (level > MARIO_LEVEL_SMALL)
 				{
 					level = MARIO_LEVEL_SMALL;
