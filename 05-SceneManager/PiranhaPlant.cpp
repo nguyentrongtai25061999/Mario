@@ -18,6 +18,11 @@ PiranhaPlant::PiranhaPlant()
 
 void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
+	if (y <= limitY && vy < 0)
+	{
+		y = limitY;
+		SetState(PIRANHAPLANT_STATE_BITING);
+	}
 	CGameObject::Update(dt, coObjects);
 
 	y += vy * dt;
@@ -37,7 +42,11 @@ void PiranhaPlant::SetState(int _state)
 	switch (_state)
 	{
 		case PIRANHAPLANT_STATE_DARTING:
-			vy = vx =0;
+			vy = PIRANHAPLANT_DARTING_SPEED;
+			break;
+		case PIRANHAPLANT_STATE_BITING:
+			vy = 0;
+			StartBitting();
 			break;
 	}
 }
