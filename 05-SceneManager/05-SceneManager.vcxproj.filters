@@ -52,6 +52,9 @@
     <Filter Include="Map Objects\Items\MushRoom">
       <UniqueIdentifier>{5c8bf675-9a69-4588-93a3-07f05c38eff3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Enemies\PiranhaPlant">
+      <UniqueIdentifier>{dc4dad1f-d5fc-4e34-948d-558d10cb9984}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -117,6 +120,9 @@
     </ClCompile>
     <ClCompile Include="MushRoom.cpp">
       <Filter>Map Objects\Items\MushRoom</Filter>
+    </ClCompile>
+    <ClCompile Include="PiranhaPlant.cpp">
+      <Filter>Map Objects\Enemies\PiranhaPlant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="MushRoom.h">
       <Filter>Map Objects\Items\MushRoom</Filter>
+    </ClInclude>
+    <ClInclude Include="PiranhaPlant.h">
+      <Filter>Map Objects\Enemies\PiranhaPlant</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

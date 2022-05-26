@@ -21,7 +21,7 @@ void CMushRoom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (start_y - y >= MUSHROOM_BBOX_HEIGHT)
 		{
 			vy = 0;
-			y = start_y - MUSHROOM_BBOX_HEIGHT - 0.1f;
+			vy =  start_y-MUSHROOM_BBOX_HEIGHT -0.1f;
 			SetState(MUSHROOM_STATE_RIGHT);
 		}
 	}
@@ -74,7 +74,7 @@ void CMushRoom::SetState(int state) {
 		break;
 	case MUSHROOM_STATE_LEFT:
 		vy = MUSHROOM_GRAVITY;
-		vx = MUSHROOM_SPEED;
+		vx = -MUSHROOM_SPEED;
 		break;
 	}
 }

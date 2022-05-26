@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include"QuestionBrick.h"
 #include "SampleKeyEventHandler.h"
+#include "PiranhaPlant.h"
 
 using namespace std;
 
@@ -209,7 +210,7 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			obj = new QuestionBrick(option_tag_1);
 			break;
 		case OBJECT_TYPE_KOOPAS:
-			obj = new CBrick(x, y);
+			obj = new CBrick(x,y);
 			break;
 		case OBJECT_TYPE_BLOCK:
 			obj = new CBlock(x, y);
@@ -358,10 +359,9 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }
+	
 
-/*
-*	Clear all objects from this scene
-*/
+	//Clear all objects from this scene
 void CPlayScene::Clear()
 {
 	vector<LPGAMEOBJECT>::iterator it;
