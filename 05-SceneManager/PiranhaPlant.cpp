@@ -27,6 +27,30 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	y += vy * dt;
 	x += vx * dt;
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario != NULL) {
+		float mLeft, mTop, mRight, mBottom;
+		float mWidth = mario->GetWidth();
+			mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			DebugOut(L"Mario !=null \n");
+			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom)) {
+				if (mario->GetLevel() != MARIO_LEVEL_SMALL)
+				{
+					mario->SetLevel(mario->GetLevel()-1);
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					mario->SetState(MARIO_STATE_DIE);
+				}
+			}
+	}
 }
 
 void PiranhaPlant::Render()

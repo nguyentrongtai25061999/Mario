@@ -9,6 +9,7 @@
 #include "QuestionBrick.h"
 #include "Collision.h"
 #include "MushRoom.h"
+#include "PiranhaPlant.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
