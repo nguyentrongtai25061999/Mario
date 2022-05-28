@@ -55,6 +55,9 @@
     <Filter Include="Map Objects\Enemies\PiranhaPlant">
       <UniqueIdentifier>{dc4dad1f-d5fc-4e34-948d-558d10cb9984}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Enemies\PiranhaPlantFire">
+      <UniqueIdentifier>{a4be315e-8fa7-4e56-9ccc-a3160c41eec5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -123,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="PiranhaPlant.cpp">
       <Filter>Map Objects\Enemies\PiranhaPlant</Filter>
+    </ClCompile>
+    <ClCompile Include="PiranhaPlantFire.cpp">
+      <Filter>Map Objects\Enemies\PiranhaPlantFire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="PiranhaPlant.h">
       <Filter>Map Objects\Enemies\PiranhaPlant</Filter>
+    </ClInclude>
+    <ClInclude Include="PiranhaPlantFire.h">
+      <Filter>Map Objects\Enemies\PiranhaPlantFire</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

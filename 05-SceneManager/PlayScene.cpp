@@ -11,6 +11,7 @@
 #include"QuestionBrick.h"
 #include "SampleKeyEventHandler.h"
 #include "PiranhaPlant.h"
+#include "PiranhaPlantFire.h"
 
 using namespace std;
 
@@ -214,11 +215,16 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			((PiranhaPlant*)obj)->SetLimitY(y);
 			obj->SetZIndex(-1);
 			break;
+		case OBJECT_TYPE_FIREPIRANHAPLANT:
+			obj = new PiranhaPlantFire(tag);
+			((PiranhaPlantFire*)obj)->SetLimitY(y);
+			obj->SetZIndex(-1);
+			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CBrick(x,y);
 			break;
 		case OBJECT_TYPE_BLOCK:
-			obj = new CBlock(x,y);
+			obj = new CBlock(x, y);
 			break;
 		case OBJECT_TYPE_COIN:
 			obj = new CCoin(tag);
@@ -361,12 +367,12 @@ void CPlayScene::Render()
 {
 	player->Render();
 	current_map->DrawMap();
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
 	// sort object to render by Z
 	sort(this->objects.begin(), this->objects.end(), [](const CGameObject* lObj, const CGameObject* rObj) {
-		return lObj->z < rObj->z;
-		});
+	return lObj->z < rObj->z;
+	});
+	for (int i = 0; i < objects.size(); i++)
+		objects[i]->Render();
 }
 	
 

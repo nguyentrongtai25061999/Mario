@@ -355,7 +355,6 @@ class CMario : public CGameObject
 	void OnCollisionWithMushRoom(LPCOLLISIONEVENT e);
 	/*void AddScore(float x, float y, int score, bool isStack = true);
 	void AddCoin() { this->coin++; }*/
-	void HandleBasicMarioDie();
 	int GetAniIdBig();
 	int GetAniIdSmall();
 
