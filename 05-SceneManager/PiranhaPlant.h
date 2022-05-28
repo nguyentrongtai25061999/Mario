@@ -9,8 +9,6 @@
 #define PIRANHAPLANT_ANI_DARTING				0
 #define PIRANHAPLANT_DARTING_SPEED				0.03f
 #define PIRANHAPLANT_STATE_BITING				100
-
-
 class PiranhaPlant :
 	public CGameObject
 {
