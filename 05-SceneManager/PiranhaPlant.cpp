@@ -23,10 +23,21 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		y = limitY;
 		SetState(PIRANHAPLANT_STATE_BITING);
 	}
+	if (y >= limitY + PIRANHAPLANT_BBOX_HEIGHT && vy > 0)
+	{
+		y = limitY + PIRANHAPLANT_BBOX_HEIGHT;
+		SetState(PIRANHAPLANT_STATE_INACTIVE);
+	}
+	if (GetTickCount64() - biting_start >= PIRANHAPLANT_BITING_TIME && biting_start != 0)
+	{
+		if (y == limitY)
+			vy = PIRANHAPLANT_DARTING_SPEED;
+			biting_start = 0;
+	}
 	CGameObject::Update(dt, coObjects);
 
 	y += vy * dt;
-	x += vx * dt;
+	//x += vx * dt;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -50,6 +61,10 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					mario->SetState(MARIO_STATE_DIE);
 				}
 			}
+			if ((floor(mario->x) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
+				|| ceil(mario->x) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
+				&& state == PIRANHAPLANT_STATE_INACTIVE && biting_start == 0)
+				SetState(PIRANHAPLANT_STATE_DARTING);
 	}
 }
 
@@ -69,6 +84,10 @@ void PiranhaPlant::SetState(int _state)
 			vy = -PIRANHAPLANT_DARTING_SPEED;
 			break;
 		case PIRANHAPLANT_STATE_BITING:
+			vy = 0;
+			StartBitting();
+			break;
+		case PIRANHAPLANT_STATE_INACTIVE:
 			vy = 0;
 			StartBitting();
 			break;
