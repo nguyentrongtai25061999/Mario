@@ -30,7 +30,17 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	CGameObject::Update(dt);
 	y += vy * dt;
-	y = limitY;
+	if (y <= limitY && vy < 0)
+	{
+		y = limitY;
+		vy = 0;
+		SetState(PIRANHAPLANT_STATE_INACTIVE);
+	}
+	if (y >= limitY + BBHeight && vy > 0)
+	{
+		y = limitY + BBHeight + 12;
+		SetState(PIRANHAPLANT_STATE_INACTIVE);
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -64,7 +74,7 @@ void PiranhaPlantFire::GetBoundingBox(float& left, float& top,
 	left = x;
 	top = y;
 	right = x + PIRANHAPLANT_BBOX_WIDTH;
-	bottom = y +PIRANHAPLANT_BBOX_HEIGHT;
+	bottom = y + BBHeight;
 }
 
 void PiranhaPlantFire::SetState(int state) {
@@ -73,6 +83,9 @@ void PiranhaPlantFire::SetState(int state) {
 	{
 	case PIRANHAPLANT_STATE_DARTING:
 		vy = -PIRANHAPLANT_DARTING_SPEED;
+		break;
+	case PIRANHAPLANT_STATE_INACTIVE:
+		vy = 0;
 		break;
 	}
 }
