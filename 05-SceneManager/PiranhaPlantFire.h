@@ -7,12 +7,18 @@
 #define PIRANHAPLANT_BOX_HEIGHT					24
 #define PIRANHAPLANT_DARTING_SPEED				0.03f
 #define PIRANHAPLANT_STATE_DARTING				0
+#define PIRANHAPLANT_ANI_RIGHT_UP			0
+#define PIRANHAPLANT_ANI_RIGHT_DOWN			1
+#define PIRANHAPLANT_ANI_LEFT_UP			2
+#define PIRANHAPLANT_ANI_LEFT_DOWN			3
 
 
 class PiranhaPlantFire :
 	public PiranhaPlant
 {
 	float limitY = 0;
+	bool Up = false;
+	bool Right = false;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 public:

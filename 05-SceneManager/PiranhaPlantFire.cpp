@@ -9,6 +9,19 @@ PiranhaPlantFire::PiranhaPlantFire(int tag) {
 void PiranhaPlantFire::Render()
 {
 	int ani = PIRANHAPLANT_STATE_DARTING;
+	if (state == PIRANHAPLANT_STATE_DARTING)
+	{
+		if (Up)
+			if (Right)
+				ani = PIRANHAPLANT_ANI_RIGHT_UP;
+			else
+				ani = PIRANHAPLANT_ANI_LEFT_UP;
+		else
+			if (Right)
+				ani = PIRANHAPLANT_ANI_RIGHT_DOWN;
+			else
+				ani = PIRANHAPLANT_ANI_LEFT_DOWN;
+	}
 	animation_set->at(ani)->Render(x, y);
 	//RenderBoundingBox();
 }
