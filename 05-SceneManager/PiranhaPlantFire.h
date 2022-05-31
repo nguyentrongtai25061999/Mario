@@ -14,10 +14,16 @@
 #define PIRANHAPLANT_ANI_LEFT_DOWN			3
 #define PIRANHAPLANT_STATE_INACTIVE			300
 
+#define PIRANHAPLANT_DELAY_TIME			750
+#define PIRANHAPLANT_AIM_TIME			750
+#define PIRANHAPLANT_ACTIVE_RANGE		20
+
 
 class PiranhaPlantFire :
 	public PiranhaPlant
 {
+	ULONGLONG aim_start = 0;
+	ULONGLONG delay_start = 0;
 	float limitY = 0;
 	bool Up = false;
 	bool Right = false;
@@ -27,6 +33,8 @@ class PiranhaPlantFire :
 public:
 
 	PiranhaPlantFire(int tag);
+	void StartAim() { aim_start = GetTickCount64(); }
+	void StartDelay() { delay_start = GetTickCount64(); }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void SetState(int state);
 	virtual int IsCollidable() { return 1; };

@@ -34,23 +34,39 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	{
 		y = limitY;
 		vy = 0;
-		SetState(PIRANHAPLANT_STATE_INACTIVE);
+		StartAim();
+		//SetState(PIRANHAPLANT_STATE_INACTIVE);
 	}
 	if (y >= limitY + BBHeight && vy > 0)
 	{
 		y = limitY + BBHeight + 12;
 		SetState(PIRANHAPLANT_STATE_INACTIVE);
+		StartDelay();
 	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-
+	if (GetTickCount64() - aim_start >= PIRANHAPLANT_AIM_TIME && aim_start != 0)
+	{
+		aim_start = 0;
+		StartDelay();
+	}
+	if (GetTickCount64() - delay_start >= PIRANHAPLANT_DELAY_TIME && delay_start != 0)
+	{
+		delay_start = 0;
+		if (y == limitY)
+			vy = PIRANHAPLANT_DARTING_SPEED;
+	}
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (mario != NULL) {
 		float mLeft, mTop, mRight, mBottom;
 		float mWidth = mario->GetWidth();
+		if ((floor(mario->x) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
+			|| ceil(mario->x) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
+			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0)
+			SetState(PIRANHAPLANT_STATE_DARTING);
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		DebugOut(L"Mario !=null \n");
 		if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom)) {
