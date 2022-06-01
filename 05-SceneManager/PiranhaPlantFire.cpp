@@ -1,6 +1,6 @@
 #include "PiranhaPlantFire.h"
 #include "PlayScene.h"
-
+#include "FireBullet.h"
 PiranhaPlantFire::PiranhaPlantFire(int tag) {
 	this->tag = tag;
 	SetState(PIRANHAPLANT_STATE_DARTING);
@@ -51,6 +51,7 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (GetTickCount64() - aim_start >= PIRANHAPLANT_AIM_TIME && aim_start != 0)
 	{
 		aim_start = 0;
+		SetState(PIRANHAPLANT_STATE_SHOOTING);
 		StartDelay();
 	}
 	if (GetTickCount64() - delay_start >= PIRANHAPLANT_DELAY_TIME && delay_start != 0)
@@ -100,8 +101,23 @@ void PiranhaPlantFire::SetState(int state) {
 	case PIRANHAPLANT_STATE_DARTING:
 		vy = -PIRANHAPLANT_DARTING_SPEED;
 		break;
+	case PIRANHAPLANT_STATE_SHOOTING:
+		vy = 0;
+		Shoot();
+		break;
 	case PIRANHAPLANT_STATE_INACTIVE:
 		vy = 0;
 		break;
 	}
+}
+void PiranhaPlantFire::Shoot() {
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	this->bullet = new FireBullet(x, y, Up, Right);
+
+	//! Basic setup for bullet object
+	int ani_set_id = BULLET_ANI_SET_ID;
+	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+	bullet->SetAnimationSet(ani_set);
+	currentScene->AddObject(bullet);
 }

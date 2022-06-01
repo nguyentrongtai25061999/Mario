@@ -1,5 +1,5 @@
 #include "FireBullet.h"
-
+#include "PiranhaPlantFire.h"
 FireBullet::FireBullet(float bx, float by, bool up, bool right) {
 	if (up) {
 		y = by;
@@ -12,6 +12,7 @@ FireBullet::FireBullet(float bx, float by, bool up, bool right) {
 
 	if (right)
 	{
+		x = bx + PIRANHAPLANT_BBOX_WIDTH;
 		vx = BULLET_SPEED_X;
 	}
 	else
@@ -46,7 +47,7 @@ void FireBullet::Render()
 	else
 		ani = BULLET_ANI_LEFT;
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void FireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)
