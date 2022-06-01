@@ -2,40 +2,35 @@
 #include "GameObject.h"
 
 #define KOOPAS_GRAVITY 0.002f
-#define KOOPAS_WALKING_SPEED 0.05f
+#define KOOPAS_WALKING_SPEED 0.03f
 
 
-#define KOOPAS_BBOX_WIDTH 16
-#define KOOPAS_BBOX_HEIGHT 14
-#define KOOPAS_BBOX_HEIGHT_DIE 7
+#define KOOPAS_BBOX_WIDTH		16
+#define KOOPAS_BBOX_HEIGHT		26
 
-#define KOOPAS_DIE_TIMEOUT 500
 
 #define KOOPAS_STATE_WALKING 100
-#define KOOPAS_STATE_DIE 200
+#define KOOPAS_STATE_DEATH	500
 
-#define ID_ANI_KOOPAS_WALKING 5000
-#define ID_ANI_KOOPAS_DIE 5001
+#define KOOPAS_ANI_WALKING_RIGHT	0
+#define KOOPAS_GREEN		0
+#define KOOPAS_RED			1
 
 class CKoopas : public CGameObject
 {
-protected:
-	float ax;
-	float ay;
+	float start_x = 0, start_y = 0;
+	int start_tag = 0;
 
-	ULONGLONG die_start;
-
+public:
+	CKoopas(float x, float y);
+	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
-
+	CKoopas(int tag);
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
-
-public:
-	CKoopas(float x, float y);
-	virtual void SetState(int state);
 };
