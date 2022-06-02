@@ -49,7 +49,6 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		float mLeft, mTop, mRight, mBottom;
 		float mWidth = mario->GetWidth();
 			mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-			DebugOut(L"Mario !=null \n");
 			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom)) {
 				if (mario->GetLevel() != MARIO_LEVEL_SMALL)
 				{

@@ -12,7 +12,7 @@
 #include "SampleKeyEventHandler.h"
 #include "PiranhaPlant.h"
 #include "PiranhaPlantFire.h"
-
+#include "Koopas.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -221,7 +221,9 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			obj->SetZIndex(-1);
 			break;
 		case OBJECT_TYPE_KOOPAS:
-			obj = new CBrick(x,y);
+			obj = new CKoopas(tag);
+			obj->SetTag(tag);
+			//DebugOut(L"Koopas\n");
 			break;
 		case OBJECT_TYPE_BLOCK:
 			obj = new CBlock(x, y);

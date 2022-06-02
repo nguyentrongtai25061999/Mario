@@ -69,7 +69,6 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0)
 			SetState(PIRANHAPLANT_STATE_DARTING);
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-		DebugOut(L"Mario !=null \n");
 		if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom)) {
 			if (mario->GetLevel() != MARIO_LEVEL_SMALL)
 			{
@@ -77,7 +76,7 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 			else
 			{
-				DebugOut(L">>> Mario DIE >>> \n");
+				//DebugOut(L">>> Mario DIE >>> \n");
 				mario->SetState(MARIO_STATE_DIE);
 			}
 		}

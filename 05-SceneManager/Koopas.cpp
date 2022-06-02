@@ -1,4 +1,4 @@
-#include "Koopas.h"
+﻿#include "Koopas.h"
 
 CKoopas::CKoopas(int tag)
 {
@@ -51,8 +51,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	int aniId = KOOPAS_ANI_WALKING_RIGHT;
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	int ani = KOOPAS_STATE_WALKING;
+	CAnimations::GetInstance()->Get(ani)->Render(x, y);
 	RenderBoundingBox();
 }
 
@@ -63,6 +63,25 @@ void CKoopas::SetState(int state)
 	{
 	case KOOPAS_STATE_WALKING:
 		vx =-KOOPAS_WALKING_SPEED;
+		break;
+	case KOOPAS_STATE_INACTIVE:
+		vx = 0;
+		vy = 0;
+		break;
+	case KOOPAS_STATE_DEATH:
+		vx = 0;
+		vy = 0;
+		break;
+	case KOOPAS_STATE_SPINNING:
+		vx = 0;
+		vy = 0;
+		break;
+	case KOOPAS_STATE_IN_SHELL:
+		vx = 0;
+		vy = 0;
+		break;
+	case KOOPAS_STATE_SHELL_UP:
+		vy = -KOOPAS_SHELL_DEFLECT_SPEED;
 		break;
 	}
 }
