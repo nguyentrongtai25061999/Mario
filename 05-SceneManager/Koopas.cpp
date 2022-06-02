@@ -1,4 +1,5 @@
 ﻿#include "Koopas.h"
+#include "Block.h"
 
 CKoopas::CKoopas(int tag)
 {
@@ -29,16 +30,24 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CKoopas*>(e->obj)) return;
-
-	if (e->ny != 0)
+	if (e->ny != 0 && e->obj->IsBlocking())
 	{
 		vy = 0;
 	}
-	else if (e->nx != 0)
+
+	else
 	{
-		vx = -vx;
+		if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			if (!dynamic_cast<CBlock*>(e->obj)) {
+				vx = -vx;
+				nx = -nx;
+			}
+			else {
+				CBlock* block = dynamic_cast<CBlock*>(e->obj);
+				block->SetIsBlocking(1);
+			}
+		}
 	}
 }
 
@@ -52,8 +61,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CKoopas::Render()
 {
 	int ani = KOOPAS_STATE_WALKING;
-	CAnimations::GetInstance()->Get(ani)->Render(x, y);
-	RenderBoundingBox();
+		if (this->nx > 0)
+			ani = KOOPAS_ANI_WALKING_LEFT;
+		else
+			ani = KOOPAS_ANI_WALKING_RIGHT;
+	animation_set->at(ani)->Render(x, y);
+	//RenderBoundingBox();
 }
 
 void CKoopas::SetState(int state)
@@ -62,7 +75,7 @@ void CKoopas::SetState(int state)
 	switch (state)
 	{
 	case KOOPAS_STATE_WALKING:
-		vx =-KOOPAS_WALKING_SPEED;
+		vx = -KOOPAS_WALKING_SPEED;
 		break;
 	case KOOPAS_STATE_INACTIVE:
 		vx = 0;
