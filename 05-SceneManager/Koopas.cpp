@@ -1,6 +1,7 @@
 ﻿#include "Koopas.h"
 #include "Block.h"
-
+#include "PlayScene.h"
+#include "Brick.h"
 CKoopas::CKoopas(int tag)
 {
 	this->start_x = x;
@@ -45,12 +46,44 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			}
 			else {
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
-				block->SetIsBlocking(1);
+				block->SetIsBlocking(0);
 			}
 		}
 	}
+	if (dynamic_cast<CBlock*>(e->obj))
+		OnCollisionWithBlock(e);
 }
+void CKoopas::OnCollisionWithBlock(LPCOLLISIONEVENT e) {
+	if (e->ny < 0)
+	{
+		vy = 0;
+		if (state == KOOPAS_STATE_SHELL_UP)
+			vx = 0;
+		if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
+		{
+			if (this->nx > 0 && x >= e->obj->x + KOOPAS_TURN_DIFF)
+				if (CalTurnable(e->obj))
+				{
+					this->nx = -1;
+					vx = this->nx * KOOPAS_WALKING_SPEED;
+				}
+			if (this->nx < 0 && x <= e->obj->x - KOOPAS_TURN_DIFF)
+				if (CalTurnable(e->obj))
+				{
+					this->nx = 1;
+					vx = this->nx * KOOPAS_WALKING_SPEED;
+				}
+		}
+	}
+	else
+	{
+		if (e->nx != 0)
+			x += vx * this->dt;
+		if (state == KOOPAS_STATE_SHELL_UP && e->ny > 0)
+			y += vy * this->dt;
+	}
 
+}
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
@@ -82,6 +115,23 @@ void CKoopas::Render()
 	animation_set->at(ani)->Render(x, y);
 	//RenderBoundingBox();
 }
+bool CKoopas::CalTurnable(LPGAMEOBJECT object)
+{
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	vector<LPGAMEOBJECT> coObjects = currentScene->GetObjects();
+	for (UINT i = 0; i < coObjects.size(); i++)
+		if (dynamic_cast<CBlock*>(coObjects[i]))
+			if (abs(coObjects[i]->y == object->y))
+			{
+				if (nx > 0)
+					if (coObjects[i]->x > object->x && coObjects[i]->x - 16 < object->x + 16)
+						return false;
+				if (nx < 0)
+					if (coObjects[i]->x + 16 > object->x - 16 && coObjects[i]->x < object->x)
+						return false;
+			}
+	return true;
+}
 
 void CKoopas::SetState(int state)
 {
@@ -90,7 +140,7 @@ void CKoopas::SetState(int state)
 	{
 	case KOOPAS_STATE_WALKING:
 		vx = this->nx * KOOPAS_WALKING_SPEED;
-	/*	vy = KOOPAS_WALKING_SPEED;*/
+		vy = KOOPAS_WALKING_SPEED;
 		break;
 	case KOOPAS_STATE_INACTIVE:
 		vx = 0;

@@ -7,7 +7,7 @@
 
 
 #define KOOPAS_BBOX_WIDTH		16
-#define KOOPAS_BBOX_HEIGHT		26
+#define KOOPAS_BBOX_HEIGHT		20
 
 
 
@@ -25,13 +25,16 @@
 #define KOOPAS_ANI_SHELL			4
 #define KOOPAS_ANI_SHAKE			5
 #define KOOPAS_ANI_SHELL_UP			6
+#define KOOPAS_BBOX_SHELL_HEIGHT	14
 
 
 #define KOOPAS_GREEN		0
 #define KOOPAS_RED			1
+#define KOOPAS_TURN_DIFF	4
 
 class CKoopas : public CGameObject
 {
+	ULONGLONG dt = 0;
 public:
 	float start_x = 0, start_y = 0;
 	int start_tag = 0;
@@ -44,4 +47,6 @@ public:
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	void OnCollisionWithBlock(LPCOLLISIONEVENT e);
+	bool CalTurnable(LPGAMEOBJECT object);
 };
