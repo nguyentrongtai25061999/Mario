@@ -32,7 +32,6 @@
 
 class CKoopas : public CGameObject
 {
-
 public:
 	float start_x = 0, start_y = 0;
 	int start_tag = 0;

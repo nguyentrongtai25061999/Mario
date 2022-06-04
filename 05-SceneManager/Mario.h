@@ -353,6 +353,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushRoom(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	/*void AddScore(float x, float y, int score, bool isStack = true);
 	void AddCoin() { this->coin++; }*/
 	int GetAniIdBig();

@@ -60,11 +60,25 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopas::Render()
 {
-	int ani = KOOPAS_STATE_WALKING;
-		if (this->nx > 0)
+	int ani = -1;
+	if (state == KOOPAS_STATE_SHELL_UP || state == KOOPAS_STATE_DEATH)
+		ani = KOOPAS_ANI_SHELL_UP;
+	else if (state == KOOPAS_STATE_IN_SHELL)
+		ani = KOOPAS_ANI_SHELL;
+	else if (state == KOOPAS_STATE_SPINNING)
+	{
+		if (vx < 0)
+			ani = KOOPAS_ANI_SPIN_LEFT;
+		else
+			ani = KOOPAS_ANI_SPIN_RIGHT;
+	}
+	else
+	{
+		if (this->nx < 0)
 			ani = KOOPAS_ANI_WALKING_LEFT;
 		else
 			ani = KOOPAS_ANI_WALKING_RIGHT;
+	}
 	animation_set->at(ani)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -75,7 +89,8 @@ void CKoopas::SetState(int state)
 	switch (state)
 	{
 	case KOOPAS_STATE_WALKING:
-		vx = -KOOPAS_WALKING_SPEED;
+		vx = this->nx * KOOPAS_WALKING_SPEED;
+	/*	vy = KOOPAS_WALKING_SPEED;*/
 		break;
 	case KOOPAS_STATE_INACTIVE:
 		vx = 0;

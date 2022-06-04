@@ -9,6 +9,7 @@
 #include "QuestionBrick.h"
 #include "Collision.h"
 #include "MushRoom.h"
+#include "Koopas.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -67,6 +68,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBrick(e);
 	else if (dynamic_cast<CMushRoom*>(e->obj))
 		OnCollisionWithMushRoom(e);
+	else if (dynamic_cast<CKoopas*>(e->obj))
+		OnCollisionWithKoopas(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -136,6 +139,22 @@ void CMario::OnCollisionWithMushRoom(LPCOLLISIONEVENT e)
 	CMushRoom* mushRoom = dynamic_cast<CMushRoom*>(e->obj);
 	mushRoom->Delete();
 	SetLevel(MARIO_LEVEL_BIG);
+}
+void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
+	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+
+	DebugOut(L" Mario collision with koopas \n");
+
+	if (koopas->GetState() == KOOPAS_STATE_WALKING) {
+		koopas->SetState(KOOPAS_STATE_IN_SHELL);
+	}
+	else if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
+		koopas->SetState(KOOPAS_STATE_SPINNING);
+	}
+	else if (koopas->GetState() == KOOPAS_STATE_SPINNING) {
+		koopas->SetState(KOOPAS_STATE_IN_SHELL);
+	}
+
 }
 int CMario::GetAniIdSmall()
 {
