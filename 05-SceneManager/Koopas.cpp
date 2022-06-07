@@ -50,13 +50,55 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			}
 		}
 	}
+	if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
 	if (dynamic_cast<CBlock*>(e->obj))
 		OnCollisionWithBlock(e);
+}
+void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
+	float mLeft, mTop, mRight, mBottom;
+	float oLeft, oTop, oRight, oBottom;
+
+	GetBoundingBox(mLeft, mTop, mRight, mBottom);
+	e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
+	if (e->ny < 0) {
+		this->vy = 0;
+		if (state == KOOPAS_STATE_SHELL_UP)
+			vx = 0;
+		if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
+		{
+			if (this->nx > 0 && x >= e->obj->x + KOOPAS_TURN_DIFF)
+				if (CalTurnable(e->obj))
+				{
+					this->nx = -1;
+					vx = this->nx * KOOPAS_WALKING_SPEED;
+				}
+			if (this->nx < 0 && x <= e->obj->x - KOOPAS_TURN_DIFF)
+				if (CalTurnable(e->obj))
+				{
+					this->nx = 1;
+					vx = this->nx * KOOPAS_WALKING_SPEED;
+				}
+		}
+		if (KOOPAS_GREEN) {
+			this->nx = -1;
+			vx = this->nx * KOOPAS_WALKING_SPEED;
+		}
+	}
+	if (e->nx != 0)
+	{
+		if (ceil(mBottom) != oTop)
+		{
+			//vx = -vx;
+			this->nx = -this->nx;
+		}
+	}
 }
 void CKoopas::OnCollisionWithBlock(LPCOLLISIONEVENT e) {
 	if (e->ny < 0)
 	{
-		vy = 0;
+		vy = 0.002f;
 		if (state == KOOPAS_STATE_SHELL_UP)
 			vx = 0;
 		if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
@@ -120,7 +162,7 @@ bool CKoopas::CalTurnable(LPGAMEOBJECT object)
 	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	vector<LPGAMEOBJECT> coObjects = currentScene->GetObjects();
 	for (UINT i = 0; i < coObjects.size(); i++)
-		if (dynamic_cast<CBlock*>(coObjects[i]))
+		if (dynamic_cast<CBlock*>(coObjects[i])|| dynamic_cast<CBrick*>(coObjects[i]))
 			if (abs(coObjects[i]->y == object->y))
 			{
 				if (nx > 0)
