@@ -332,6 +332,7 @@ public:
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
+	ULONGLONG start_kicking = 0;
 	BOOLEAN isOnPlatform = false;
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
@@ -392,7 +393,7 @@ public:
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-
+	void StartKicking() { start_kicking = GetTickCount64(); isKick = true; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() {
 		return this->level;

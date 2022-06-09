@@ -160,7 +160,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 	}
 	if (e->ny > 0) {
 		if (koopas->GetState() == KOOPAS_STATE_IN_SHELL || koopas->GetState() == KOOPAS_STATE_SHELL_UP) {
-			//SetState(MARIO_STATE_KICK);
+			SetState(MARIO_STATE_KICK);
 			koopas->SetState(KOOPAS_STATE_SPINNING);
 		}
 		else {
@@ -567,8 +567,10 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+	case MARIO_STATE_KICK:
+		StartKicking();
+		break;
 	}
-
 	CGameObject::SetState(state);
 }
 
