@@ -58,6 +58,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 	if (dynamic_cast<CBlock*>(e->obj))
 		OnCollisionWithBlock(e);
+	if (dynamic_cast<CGoomba*>(e->obj))
+		OnCollisionWithGoomba(e);
 }
 void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	float mLeft, mTop, mRight, mBottom;
@@ -130,6 +132,22 @@ void CKoopas::OnCollisionWithBlock(LPCOLLISIONEVENT e) {
 			y += vy * this->dt;
 	}
 
+}
+void CKoopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+
+	if (this->GetState() == KOOPAS_STATE_SPINNING)
+	{
+		goomba->SetState(GOOMBA_STATE_DIE);
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+	}
+	else
+	{
+		goomba->vx = -goomba->vx;
+		goomba->nx = -goomba->nx;
+		this->vx = -this->vx;
+		this->nx = -this->nx;
+	}
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

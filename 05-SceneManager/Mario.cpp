@@ -155,7 +155,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 			}
 		}
 		else {
-			//HandleBasicMarioDie();
+			HandleBasicMarioDie();
 		}
 	}
 	if (e->ny > 0) {
