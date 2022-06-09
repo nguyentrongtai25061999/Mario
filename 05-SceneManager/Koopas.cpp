@@ -8,7 +8,7 @@ CKoopas::CKoopas(int tag)
 	this->start_x = x;
 	this->start_y = y;
 	this->start_tag = tag;
-	if (tag == KOOPAS_GREEN) {
+	if (tag == KOOPAS_GREEN || tag == KOOPAS_GREEN_PARA) {
 		this->nx = -1;
 	}
 	this->nx = -1;
@@ -60,6 +60,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBlock(e);
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	if (dynamic_cast<CKoopas*>(e->obj))
+		OnCollisionWithKoopas(e);
 }
 void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	float mLeft, mTop, mRight, mBottom;
@@ -149,6 +151,33 @@ void CKoopas::OnCollisionWithGoomba(LPCOLLISIONEVENT e) {
 		this->nx = -this->nx;
 	}
 }
+void CKoopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
+
+	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (koopas->state == KOOPAS_STATE_SPINNING)
+	{
+		if (koopas->tag == KOOPAS_GREEN_PARA)
+			koopas->tag = KOOPAS_GREEN;
+		SetState(KOOPAS_STATE_DEATH);
+	}
+	else
+	{
+		if ((koopas->state == KOOPAS_STATE_SHELL_UP || koopas->state == KOOPAS_STATE_IN_SHELL)
+			&& state == KOOPAS_STATE_WALKING)
+		{
+			DebugOut(L"OnCollisionWithKoopas else 1 \n");
+		}
+		if (koopas->state == KOOPAS_STATE_WALKING)
+		{
+			DebugOut(L"OnCollisionWithKoopas - else 2 \n");
+			this->vx = -this->vx;
+			this->nx = -this->nx;
+			koopas->vx = -koopas->vx;
+			koopas->nx = -koopas->nx;
+		}
+	}
+}
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay* dt;
@@ -205,6 +234,13 @@ void CKoopas::Render()
 			ani = KOOPAS_ANI_WALKING_LEFT;
 		else
 			ani = KOOPAS_ANI_WALKING_RIGHT;
+	}
+	if (state != KOOPAS_STATE_DEATH) {
+		if (tag == KOOPAS_GREEN_PARA || tag == KOOPAS_RED_PARA)
+			if (this->nx < 0)
+				ani = KOOPAS_ANI_PARA_LEFT;
+			else
+				ani = KOOPAS_ANI_PARA_RIGHT;
 	}
 	animation_set->at(ani)->Render(x, y);
 	//RenderBoundingBox();

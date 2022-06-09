@@ -25,11 +25,16 @@
 #define KOOPAS_ANI_SHELL			4
 #define KOOPAS_ANI_SHAKE			5
 #define KOOPAS_ANI_SHELL_UP			6
+#define KOOPAS_ANI_PARA_RIGHT		7
+#define KOOPAS_ANI_PARA_LEFT		8
+
 #define KOOPAS_BBOX_SHELL_HEIGHT	14
 
 
 #define KOOPAS_GREEN		0
 #define KOOPAS_RED			1
+#define KOOPAS_GREEN_PARA	2
+#define KOOPAS_RED_PARA		3
 #define KOOPAS_TURN_DIFF	4
 
 class CKoopas : public CGameObject
@@ -57,5 +62,6 @@ public:
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	bool CalTurnable(LPGAMEOBJECT object);
 };
