@@ -324,6 +324,7 @@
 
 class CMario : public CGameObject
 {
+public:
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -386,6 +387,8 @@ public:
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
+
+	void HandleBasicMarioDie();
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }

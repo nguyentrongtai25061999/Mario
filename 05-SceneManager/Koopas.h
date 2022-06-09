@@ -34,17 +34,24 @@
 
 class CKoopas : public CGameObject
 {
+	ULONGLONG reviving_start = 0;
+	ULONGLONG shell_start = 0;
 	ULONGLONG dt = 0;
 public:
+	float ay;
 	float start_x = 0, start_y = 0;
 	int start_tag = 0;
+	bool isBeingHeld = false;
+	void StartShell() { shell_start = GetTickCount64(); reviving_start = 0; }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
+	void SetIsBeingHeld(bool m) { isBeingHeld = m; };
 	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	CKoopas(int tag);
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
+	void HandleBeingHeld(LPGAMEOBJECT player);
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);

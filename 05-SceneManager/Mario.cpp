@@ -85,8 +85,9 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				goomba->SetTag(GOOMBA_RED_NORMAL);
 			}
 			else
-			goomba->SetState(GOOMBA_STATE_DIE);
+				goomba->SetState(GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
+			//DebugOut(L"vx ,%f",vx);
 		}
 	}
 	else // hit by Goomba
@@ -142,19 +143,65 @@ void CMario::OnCollisionWithMushRoom(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-
-	DebugOut(L" Mario collision with koopas \n");
-
-	if (koopas->GetState() == KOOPAS_STATE_WALKING) {
-		koopas->SetState(KOOPAS_STATE_IN_SHELL);
+	if (e->nx != 0) {
+		if (koopas->GetState() == KOOPAS_STATE_IN_SHELL || koopas->GetState() == KOOPAS_STATE_SHELL_UP) {
+			if (isReadyToHold) {
+				isHolding = true;
+				koopas->SetIsBeingHeld(true);
+			}
+			else {
+				SetState(MARIO_STATE_KICK);
+				koopas->SetState(KOOPAS_STATE_SPINNING);
+			}
+		}
+		else {
+			//HandleBasicMarioDie();
+		}
 	}
-	else if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
-		koopas->SetState(KOOPAS_STATE_SPINNING);
+	if (e->ny > 0) {
+		if (koopas->GetState() == KOOPAS_STATE_IN_SHELL || koopas->GetState() == KOOPAS_STATE_SHELL_UP) {
+			//SetState(MARIO_STATE_KICK);
+			koopas->SetState(KOOPAS_STATE_SPINNING);
+		}
+		else {
+			koopas->x = this->x + nx * 2;
+			HandleBasicMarioDie();
+		}
 	}
-	else if (koopas->GetState() == KOOPAS_STATE_SPINNING) {
-		koopas->SetState(KOOPAS_STATE_IN_SHELL);
+	if (e->ny < 0) {
+		CGame* game = CGame::GetInstance();
+
+		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		if (koopas->GetState() == KOOPAS_STATE_WALKING) {
+			if (koopas->tag == KOOPAS_GREEN);
+			else koopas->SetState(KOOPAS_STATE_IN_SHELL);
+		}
+		else if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
+			koopas->SetState(KOOPAS_STATE_SPINNING);
+			DebugOut(L"vy %f", koopas->vy);
+			DebugOut(L"ay %f", koopas->ay);
+		}
+		else if (koopas->GetState() == KOOPAS_STATE_SPINNING) {
+			koopas->SetState(KOOPAS_STATE_IN_SHELL);
+		}
 	}
 
+
+}
+void CMario::HandleBasicMarioDie() {
+
+	if (level != MARIO_LEVEL_SMALL)
+	{
+		level -= 1;
+		SetLevel(level);
+		StartUntouchable();
+		DebugOut(L">>> Mario TRANSFORM >>>%d \n", level);
+	}
+	else
+	{
+		DebugOut(L">>> Mario DIE >>> \n");
+		SetState(MARIO_STATE_DIE);
+	}
 }
 int CMario::GetAniIdSmall()
 {
@@ -435,7 +482,7 @@ void CMario::Render()
 
 	}
 	if (isSitting) {
-		animation_set->at(aniId)->Render(x, y+5);
+		animation_set->at(aniId)->Render(x, y + 5);
 	}
 
 	else {
@@ -550,7 +597,7 @@ void CMario::SetLevel(int l)
 	// Adjust position to avoid falling off platform
 	if (this->level == MARIO_LEVEL_SMALL)
 	{
-		y -= MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT ;
+		y -= MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT;
 	}
 	level = l;
 }

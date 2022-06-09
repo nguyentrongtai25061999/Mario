@@ -2,6 +2,7 @@
 #include "Block.h"
 #include "PlayScene.h"
 #include "Brick.h"
+#include "Mario.h"
 CKoopas::CKoopas(int tag)
 {
 	this->start_x = x;
@@ -19,10 +20,13 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 	left = x;
 	top = y;
 	right = x + KOOPAS_BBOX_WIDTH;
-	bottom = y + KOOPAS_BBOX_HEIGHT;
+	if (state == KOOPAS_STATE_IN_SHELL || state == KOOPAS_STATE_SPINNING || state == KOOPAS_STATE_SHELL_UP)
+	{
+		bottom = y + KOOPAS_BBOX_SHELL_HEIGHT;
+	}
+	else
+		bottom = y + 20;
 }
-
-
 void CKoopas::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
@@ -99,6 +103,7 @@ void CKoopas::OnCollisionWithBlock(LPCOLLISIONEVENT e) {
 	if (e->ny < 0)
 	{
 		vy = 0.002f;
+		/*DebugOut(L"vy %f", vy);*/
 		if (state == KOOPAS_STATE_SHELL_UP)
 			vx = 0;
 		if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
@@ -128,10 +133,39 @@ void CKoopas::OnCollisionWithBlock(LPCOLLISIONEVENT e) {
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	vy += ay* dt;
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	HandleBeingHeld(mario);
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
+void CKoopas::HandleBeingHeld(LPGAMEOBJECT player) {
 
+	CMario* mario = dynamic_cast<CMario*>(player);
+
+	if (isBeingHeld && mario->isHolding) {
+		if (state == KOOPAS_STATE_IN_SHELL || state == KOOPAS_STATE_SHELL_UP) {
+			if (mario->nx > 0) {
+				x = mario->x + MARIO_BIG_BBOX_WIDTH * mario->nx - 3.0f;
+			}
+			else x = mario->x + MARIO_BIG_BBOX_WIDTH * mario->nx;
+			if (mario->GetLevel() != MARIO_LEVEL_SMALL) {
+				y = mario->y - 2.0f;
+			}
+			else {
+				y = mario->y - 2.0f;
+			}
+			vy = 0;
+		}
+	}
+	else if (isBeingHeld && !mario->isHolding) {
+		if (state == KOOPAS_STATE_SHELL_UP || state == KOOPAS_STATE_IN_SHELL) {
+			this->nx = mario->nx;
+			isBeingHeld = false;
+			SetState(KOOPAS_STATE_SPINNING);
+		}
+	}
+}
 
 void CKoopas::Render()
 {
@@ -183,6 +217,7 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_WALKING:
 		vx = this->nx * KOOPAS_WALKING_SPEED;
 		vy = KOOPAS_WALKING_SPEED;
+		ay = KOOPAS_GRAVITY;
 		break;
 	case KOOPAS_STATE_INACTIVE:
 		vx = 0;
@@ -193,12 +228,14 @@ void CKoopas::SetState(int state)
 		vy = 0;
 		break;
 	case KOOPAS_STATE_SPINNING:
-		vx = 0;
-		vy = 0;
+		vx = KOOPAS_WALKING_SPEED * 5;
+		ay = KOOPAS_GRAVITY;
+		vy = KOOPAS_GRAVITY;
 		break;
 	case KOOPAS_STATE_IN_SHELL:
 		vx = 0;
 		vy = 0;
+		StartShell();
 		break;
 	case KOOPAS_STATE_SHELL_UP:
 		vy = -KOOPAS_SHELL_DEFLECT_SPEED;
