@@ -187,8 +187,32 @@ void CKoopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay* dt;
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (GetTickCount64() - shell_start >= KOOPAS_SHELL_TIME && shell_start != 0 && state != KOOPAS_STATE_SPINNING) {
+		shell_start = 0;
+		StartReviving();
+	}
+
+	if (GetTickCount64() - reviving_start >= KOOPAS_REVIVE_TIME && reviving_start != 0 && state != KOOPAS_STATE_SPINNING && shell_start == 0)
+	{
+		reviving_start = 0;
+		y -= (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT) + 1.0f;
+		if (isBeingHeld)
+		{
+			isBeingHeld = false;
+			mario->isHolding = false;
+		}
+		SetState(KOOPAS_STATE_WALKING);
+	}
+	this->dt = dt;
+	vy += KOOPAS_GRAVITY* dt;
+	if (!isBeingHeld)
+	{
+		if (tag == KOOPAS_GREEN_PARA)
+			vy += KOOPAS_PARA_GRAVITY * dt;
+		if (tag == KOOPAS_RED || tag == KOOPAS_GREEN)
+			vy += KOOPAS_GRAVITY * dt;
+	}
 	HandleBeingHeld(mario);
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -248,6 +272,13 @@ void CKoopas::Render()
 				ani = KOOPAS_ANI_PARA_LEFT;
 			else
 				ani = KOOPAS_ANI_PARA_RIGHT;
+		if (reviving_start != 0)
+		{
+			if (state == KOOPAS_STATE_IN_SHELL)
+				ani = KOOPAS_ANI_SHAKE;
+			if (state == KOOPAS_STATE_SHELL_UP)
+				ani = KOOPAS_ANI_SHAKE_UP;
+		}
 	}
 	animation_set->at(ani)->Render(x, y);
 	//RenderBoundingBox();
@@ -285,13 +316,14 @@ void CKoopas::SetState(int state)
 		vy = 0;
 		break;
 	case KOOPAS_STATE_DEATH:
+		y += 1;
 		vx = 0;
 		vy = 0;
 		break;
 	case KOOPAS_STATE_SPINNING:
 		vx = KOOPAS_WALKING_SPEED * 5;
-		ay = KOOPAS_GRAVITY;
-		vy = KOOPAS_GRAVITY;
+		/*ay = KOOPAS_GRAVITY;
+		vy = KOOPAS_GRAVITY;*/
 		break;
 	case KOOPAS_STATE_IN_SHELL:
 		vx = 0;
@@ -300,6 +332,9 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_SHELL_UP:
 		vy = -KOOPAS_SHELL_DEFLECT_SPEED;
+		nx = 1;
+		vx = nx * KOOPAS_WALKING_SPEED;
+		StartShell();
 		break;
 	}
 }

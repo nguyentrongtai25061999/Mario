@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 #define KOOPAS_GRAVITY					0.002f
+#define KOOPAS_PARA_GRAVITY				0.001f
 #define KOOPAS_WALKING_SPEED			0.03f
 #define KOOPAS_SHELL_DEFLECT_SPEED		0.4f
 #define KOOPAS_JUMP_SPEED				0.35f
@@ -19,6 +20,9 @@
 #define KOOPAS_STATE_DEATH		500
 #define KOOPAS_STATE_INACTIVE	600
 
+#define KOOPAS_REVIVE_TIME		2000
+#define KOOPAS_SHELL_TIME		5000
+
 #define KOOPAS_ANI_WALKING_RIGHT	0
 #define KOOPAS_ANI_SPIN_RIGHT		1
 #define KOOPAS_ANI_WALKING_LEFT		2
@@ -28,6 +32,7 @@
 #define KOOPAS_ANI_SHELL_UP			6
 #define KOOPAS_ANI_PARA_RIGHT		7
 #define KOOPAS_ANI_PARA_LEFT		8
+#define KOOPAS_ANI_SHAKE_UP			9
 
 #define KOOPAS_BBOX_SHELL_HEIGHT	14
 
@@ -48,6 +53,7 @@ public:
 	float start_x = 0, start_y = 0;
 	int start_tag = 0;
 	bool isBeingHeld = false;
+	void StartReviving() { reviving_start = GetTickCount64(); }
 	void StartShell() { shell_start = GetTickCount64(); reviving_start = 0; }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
