@@ -173,7 +173,9 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		if (koopas->GetState() == KOOPAS_STATE_WALKING) {
-			if (koopas->tag == KOOPAS_GREEN);
+			if (koopas->tag == KOOPAS_GREEN_PARA) {
+				koopas->SetTag(KOOPAS_GREEN);
+			}
 			else koopas->SetState(KOOPAS_STATE_IN_SHELL);
 		}
 		else if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
@@ -185,8 +187,6 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 			koopas->SetState(KOOPAS_STATE_IN_SHELL);
 		}
 	}
-
-
 }
 void CMario::HandleBasicMarioDie() {
 

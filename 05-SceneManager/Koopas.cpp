@@ -89,7 +89,7 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 					vx = this->nx * KOOPAS_WALKING_SPEED;
 				}
 		}
-		if (KOOPAS_GREEN) {
+		if (tag == KOOPAS_GREEN_PARA || tag == KOOPAS_GREEN) {
 			this->nx = -1;
 			vx = this->nx * KOOPAS_WALKING_SPEED;
 		}
@@ -124,6 +124,13 @@ void CKoopas::OnCollisionWithBlock(LPCOLLISIONEVENT e) {
 					this->nx = 1;
 					vx = this->nx * KOOPAS_WALKING_SPEED;
 				}
+		}
+		if (tag == KOOPAS_GREEN_PARA)
+		{
+			y = e->obj->y - KOOPAS_BBOX_HEIGHT;
+			vy = -KOOPAS_JUMP_SPEED;
+			vx = vx = this->nx * KOOPAS_WALKING_SPEED;
+			this->nx = -1;
 		}
 	}
 	else
