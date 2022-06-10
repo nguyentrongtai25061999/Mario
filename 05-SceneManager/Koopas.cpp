@@ -3,6 +3,7 @@
 #include "PlayScene.h"
 #include "Brick.h"
 #include "Mario.h"
+#include "QuestionBrick.h"
 CKoopas::CKoopas(int tag)
 {
 	this->start_x = x;
@@ -56,6 +57,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	if (dynamic_cast<QuestionBrick*>(e->obj))
+		OnCollisionWithQuestionBrick(e);
 	if (dynamic_cast<CBlock*>(e->obj))
 		OnCollisionWithBlock(e);
 	if (dynamic_cast<CGoomba*>(e->obj))
@@ -184,6 +187,11 @@ void CKoopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 			koopas->nx = -koopas->nx;
 		}
 	}
+}
+void CKoopas::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e) {
+	QuestionBrick* qBrick = dynamic_cast<QuestionBrick*>(e->obj);
+	if (qBrick->state != QUESTION_BRICK_HIT && state == KOOPAS_STATE_SPINNING)
+		qBrick->SetState(QUESTION_BRICK_HIT);
 }
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -321,7 +329,9 @@ void CKoopas::SetState(int state)
 		vy = 0;
 		break;
 	case KOOPAS_STATE_SPINNING:
-		vx = KOOPAS_WALKING_SPEED * 5;
+		CMario* mario;
+		mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		vx = mario->nx * KOOPAS_WALKING_SPEED * 5;
 		/*ay = KOOPAS_GRAVITY;
 		vy = KOOPAS_GRAVITY;*/
 		break;
