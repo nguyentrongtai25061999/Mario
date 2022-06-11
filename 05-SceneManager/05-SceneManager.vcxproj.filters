@@ -61,6 +61,9 @@
     <Filter Include="Map Objects\Enemies\Items\MushRoom">
       <UniqueIdentifier>{5c8bf675-9a69-4588-93a3-07f05c38eff3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Others\Tail">
+      <UniqueIdentifier>{9d2a1036-f0e6-408d-a274-84e986731b8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -135,6 +138,9 @@
     </ClCompile>
     <ClCompile Include="FireBullet.cpp">
       <Filter>Map Objects\Others\FireBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Tail.cpp">
+      <Filter>Map Objects\Others\Tail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="PiranhaPlant.h">
       <Filter>Map Objects\Enemies\PiranhaPlant</Filter>
+    </ClInclude>
+    <ClInclude Include="Tail.h">
+      <Filter>Map Objects\Others\Tail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 #include "Animations.h"
+#include "Tail.h"
 
 #include "debug.h"
 
@@ -348,6 +349,9 @@ public:
 	BOOLEAN isFlapping = false;
 	BOOLEAN isPipeUp = false;
 	BOOLEAN isPipeDown = false;
+	BOOLEAN isTailFlying = false;
+	BOOLEAN isFlappingTailFlying = false;
+
 	int coin;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
@@ -360,6 +364,9 @@ public:
 	void AddCoin() { this->coin++; }*/
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdTail();
+
+	CTail* tail = NULL;
 
 public:
 	CMario(float x, float y) : CGameObject(x, y)
@@ -374,6 +381,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		tail = new CTail(80, y);
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

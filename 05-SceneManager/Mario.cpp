@@ -10,6 +10,7 @@
 #include "Collision.h"
 #include "MushRoom.h"
 #include "Koopas.h"
+#include "Tail.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -17,7 +18,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	HandleMarioKicking();
-
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -330,6 +330,123 @@ int CMario::GetAniIdSmall()
 
 	return aniId;
 }
+int CMario::GetAniIdTail() {
+	int aniId = -1;
+	if (!isOnPlatform)
+	{
+		if (abs(ax) == MARIO_ACCEL_RUN_X)
+		{
+			if (nx >= 0)
+				aniId = MARIO_ANI_TAIL_RUNNING_RIGHT;
+			else
+				aniId = MARIO_ANI_TAIL_RUNNING_LEFT;
+		}
+		else
+		{
+			if (nx >= 0)
+				aniId = MARIO_ANI_TAIL_WALKING_FAST_RIGHT;
+			else
+				aniId = MARIO_ANI_TAIL_WALKING_FAST_LEFT;
+		}
+	}
+	if (state == MARIO_STATE_JUMP || state == MARIO_STATE_RELEASE_JUMP || isHolding || isKick) {
+		if (nx > 0) {
+			aniId = MARIO_ANI_TAIL_JUMPINGUP_RIGHT;
+			if (isTailFlying) {
+				aniId = MARIO_ANI_TAIL_FLY_UP_RIGHT;
+			}
+			if (isFlapping)
+				aniId = MARIO_ANI_TAIL_FLAPPING_RIGHT;
+			else if (isFlappingTailFlying)
+				aniId = MARIO_ANI_TAIL_FLY_FLAPPING_RIGHT;
+			else if (isHolding) {
+				aniId = MARIO_ANI_TAIL_HOLD_RUNNING_RIGHT;
+			}
+			else if (isKick)
+			{
+				aniId = MARIO_ANI_TAIL_KICKING_RIGHT;
+			}
+		}
+		if (nx < 0) {
+			aniId = MARIO_ANI_TAIL_JUMPINGUP_LEFT;
+			if (isTailFlying) {
+				aniId = MARIO_ANI_TAIL_FLY_UP_LEFT;
+			}
+			if (isFlapping)
+				aniId = MARIO_ANI_TAIL_FLAPPING_LEFT;
+			else if (isFlappingTailFlying)
+				aniId = MARIO_ANI_TAIL_FLY_FLAPPING_LEFT;
+			else if (isHolding) {
+				aniId = MARIO_ANI_TAIL_HOLD_RUNNING_LEFT;
+			}
+			else if (isKick)
+			{
+				aniId = MARIO_ANI_TAIL_KICKING_LEFT;
+			}
+		}
+	}
+	else
+		if (isSitting)
+		{
+			if (nx > 0)
+				aniId = MARIO_ANI_TAIL_SITTING_RIGHT;
+			else
+				aniId = MARIO_ANI_TAIL_SITTING_LEFT;
+		}
+		else
+			if (vx == 0)
+			{
+				if (nx > 0) aniId = MARIO_ANI_TAIL_IDLE_RIGHT;
+				else aniId = MARIO_ANI_TAIL_IDLE_LEFT;
+			}
+			else if (vx > 0)
+			{
+				if (ax < 0)
+					aniId = MARIO_ANI_TAIL_BRAKING_RIGHT;
+				else if (ax == MARIO_ACCEL_RUN_X)
+				{
+					aniId = MARIO_ANI_TAIL_RUNNING_RIGHT;
+				}
+				else if (ax == MARIO_ACCEL_WALK_X) {
+					aniId = MARIO_ANI_TAIL_WALKING_RIGHT;
+				}
+
+				if (!isOnPlatform) {
+					aniId = MARIO_ANI_TAIL_JUMPINGUP_RIGHT;
+					if (isTailFlying) {
+						aniId = MARIO_ANI_TAIL_FLY_UP_RIGHT;
+						if (isFlappingTailFlying)
+							aniId = MARIO_ANI_TAIL_FLY_FLAPPING_RIGHT;
+					}
+					if (isFlapping)
+						aniId = MARIO_ANI_TAIL_FLAPPING_RIGHT;
+				}
+			}
+			else // vx < 0
+			{
+				if (ax > 0)
+					aniId = MARIO_ANI_TAIL_BRAKING_LEFT;
+				else if (ax == -MARIO_ACCEL_RUN_X)
+					aniId = MARIO_ANI_TAIL_RUNNING_LEFT;
+				else if (ax == -MARIO_ACCEL_WALK_X)
+					aniId = MARIO_ANI_TAIL_WALKING_LEFT;
+
+				if (!isOnPlatform) {
+					aniId = MARIO_ANI_TAIL_JUMPINGUP_LEFT;
+					if (isTailFlying) {
+						aniId = MARIO_ANI_TAIL_FLY_UP_LEFT;
+						if (isFlappingTailFlying)
+							aniId = MARIO_ANI_TAIL_FLY_FLAPPING_LEFT;
+					}
+					if (isFlapping)
+						aniId = MARIO_ANI_TAIL_FLAPPING_LEFT;
+				}
+			}
+
+	if (aniId == -1) aniId = MARIO_ANI_TAIL_IDLE_RIGHT;
+
+	return aniId;
+}
 
 int CMario::GetAniIdBig()
 {
@@ -484,22 +601,22 @@ void CMario::Render()
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
 		aniId = GetAniIdSmall();
+	else if (level == MARIO_LEVEL_TAIL)
+		aniId = GetAniIdTail();
 
 	if (state == MARIO_STATE_TRANSFORM) {
 		if (nx > 0) {
 			aniId = MARIO_ANI_TRANSFORM_SMALL_RIGHT;
 		}
-
+		else aniId = MARIO_ANI_TRANSFORM_SMALL_LEFT;
 	}
 	if (isSitting) {
 		animation_set->at(aniId)->Render(x, y + 5);
 	}
-
 	else {
 		animation_set->at(aniId)->Render(x, y);
 	}
 	//RenderBoundingBox();
-
 }
 
 void CMario::SetState(int state)
