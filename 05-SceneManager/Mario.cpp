@@ -16,6 +16,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	HandleMarioKicking();
+
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -201,6 +203,14 @@ void CMario::HandleBasicMarioDie() {
 	{
 		DebugOut(L">>> Mario DIE >>> \n");
 		SetState(MARIO_STATE_DIE);
+	}
+}
+void CMario::HandleMarioKicking() {
+	if (isKick) {
+		if (GetTickCount64() - start_kicking > MARIO_KICKING_TIME) {
+			StopKicking();
+			SetState(MARIO_STATE_IDLE);
+		}
 	}
 }
 int CMario::GetAniIdSmall()

@@ -390,10 +390,12 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void HandleBasicMarioDie();
+	void HandleMarioKicking();
 
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	void StartKicking() { start_kicking = GetTickCount64(); isKick = true; }
+	void StopKicking() { start_kicking = 0; isKick = false; }
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() {
 		return this->level;
