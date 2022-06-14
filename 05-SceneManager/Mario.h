@@ -366,6 +366,8 @@ public:
 	int GetAniIdSmall();
 	int GetAniIdTail();
 
+	BOOLEAN isTuring = false;
+	int turningStack = 0;
 	CTail* tail = NULL;
 
 public:
