@@ -26,6 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+	tail->Update(dt, coObjects);
 
 	//isOnPlatform = false;
 
@@ -638,7 +639,7 @@ void CMario::Render()
 	else {
 		animation_set->at(aniId)->Render(x, y);
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 }
 
@@ -719,6 +720,12 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_KICK:
 		StartKicking();
+		break;
+	case MARIO_STATE_TAIL_ATTACK:
+		if (!isTuring) {
+			turningStack = 0;
+			StartTurning();
+		}
 		break;
 	}
 	CGameObject::SetState(state);

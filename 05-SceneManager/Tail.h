@@ -3,9 +3,12 @@
 
 #define TAIL_BBOX_WIDTH		8
 #define TAIL_BBOX_HEIGHT	6
+#define TAIL_HIT_SPRITE_ID	10998	
+#define TAIL_HIT_TIME 25
 
 class CTail :public CGameObject
 {
+	ULONGLONG hit_start = 0;
 	
 public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);

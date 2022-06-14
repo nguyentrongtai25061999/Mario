@@ -32,7 +32,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_DIE);
 		break;
 	case DIK_A:
-		mario->isReadyToHold = true;
+		//mario->isReadyToHold = true;
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL && !mario->isSitting && !mario->isHolding)
+			mario->SetState(MARIO_STATE_TAIL_ATTACK);
 		break;
 	case DIK_R: // reset
 		//Reload();
@@ -70,9 +72,15 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (game->IsKeyDown(DIK_A))
+		{
+			mario->isReadyToHold = true;
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-		else
+		}
+		else {
+			mario->isReadyToHold = false;
+			mario->isHolding = false;
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		}
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
@@ -89,5 +97,5 @@ void CSampleKeyHandler::KeyState(BYTE* states)
 		}
 	}
 	else
-		mario->SetState(MARIO_STATE_IDLE);
+		if (mario->getIsOnPlatForm() && !mario->isTuring) mario->SetState(MARIO_STATE_IDLE);
 }
