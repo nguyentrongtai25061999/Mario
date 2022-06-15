@@ -370,6 +370,8 @@ public:
 	int GetAniIdTail();
 
 	BOOLEAN isTuring = false;
+	bool isRunning = false;
+	bool isReadyToRun = false;
 	int turningStack = 0;
 	CTail* tail = NULL;
 
