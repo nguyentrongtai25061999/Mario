@@ -1,6 +1,7 @@
 #include "PiranhaPlantFire.h"
 #include "PlayScene.h"
 #include "FireBullet.h"
+#include "Mario.h"
 PiranhaPlantFire::PiranhaPlantFire(int tag) {
 	this->tag = tag;
 	SetState(PIRANHAPLANT_STATE_DARTING);
@@ -27,6 +28,11 @@ void PiranhaPlantFire::Render()
 }
 
 void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (GetTickCount64() - dying_start >= PIRANHAPLANT_DIYING_TIME && dying_start != 0)
+		isDeleted = true;
+
+	if (state == PIRANHAPLANT_STATE_DEATH)
+		return;
 
 	CGameObject::Update(dt);
 	y += vy * dt;
@@ -70,14 +76,15 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			SetState(PIRANHAPLANT_STATE_DARTING);
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom)) {
-			if (mario->GetLevel() != MARIO_LEVEL_SMALL)
-			{
-				mario->SetLevel(mario->GetLevel() - 1);
-			}
-			else
-			{
-				//DebugOut(L">>> Mario DIE >>> \n");
-				mario->SetState(MARIO_STATE_DIE);
+			mario->HandleBasicMarioDie();
+		}
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL) {
+			mario->tail->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+
+			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->isTuring) {
+				SetState(PIRANHAPLANT_STATE_DEATH);
+				 DebugOut(L">>> PRANHAPLANT DIE >>> \n");
+				mario->tail->ShowHitEffect();
 			}
 		}
 	}
@@ -106,6 +113,10 @@ void PiranhaPlantFire::SetState(int state) {
 		break;
 	case PIRANHAPLANT_STATE_INACTIVE:
 		vy = 0;
+		break;
+	case PIRANHAPLANT_STATE_DEATH:
+		vy = 0;
+		StartDying();
 		break;
 	}
 }

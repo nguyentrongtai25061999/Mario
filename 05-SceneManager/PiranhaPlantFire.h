@@ -18,6 +18,8 @@
 #define PIRANHAPLANT_ACTIVE_RANGE		20
 #define PIRANHAPLANT_STATE_SHOOTING				100
 #define BULLET_ANI_SET_ID		9
+#define PIRANHAPLANT_STATE_DEATH				200
+#define PIRANHAPLANT_DIYING_TIME		250
 
 class PiranhaPlantFire :
 	public PiranhaPlant
@@ -25,6 +27,7 @@ class PiranhaPlantFire :
 	ULONGLONG shooting_start = 0;
 	ULONGLONG aim_start = 0;
 	ULONGLONG delay_start = 0;
+	ULONGLONG dying_start = 0;
 	float limitY = 0;
 	bool Up = false;
 	bool Right = false;
@@ -39,6 +42,7 @@ public:
 	void Shoot();
 	void StartShooting() { shooting_start = GetTickCount64(); }
 	void StartDelay() { delay_start = GetTickCount64(); }
+	void StartDying() { dying_start = GetTickCount64(); }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void SetState(int state);
 	virtual int IsCollidable() { return 1; };
