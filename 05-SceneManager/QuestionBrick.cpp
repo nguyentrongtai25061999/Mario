@@ -51,7 +51,15 @@ void QuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	x += vx * dt;
 	y += vy * dt;
+	float mLeft, mTop, mRight, mBottom;
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario != NULL && totalItems > 0 && state != QUESTION_BRICK_HIT && mario->isTuring) {
+		mario->tail->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+		if (isColliding(mLeft, mTop, mRight, mBottom)) {
+			SetState(QUESTION_BRICK_HIT);
+		}
+
+	}
 	if (state == QUESTION_BRICK_HIT) {
 		if (tag == ITEM_COIN_QUESTION_BRICK_COIN) {
 			CreateItem(tag);
