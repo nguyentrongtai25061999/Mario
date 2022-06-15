@@ -16,7 +16,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
-
+	HandleMarioJump();
 	HandleMarioKicking();
 	HandleTurning();
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
@@ -228,6 +228,50 @@ void CMario::HandleTurning() {
 		turningStack = 0;
 	}
 
+}
+void CMario::HandleMarioJump() {
+	if (isJumping) {
+		//DebugOut(L"ax::%f\n", 0.0f);
+		//DebugOut(L"vy::%f\n", vy);
+		// Dung yen nhay
+		if (vx == 0)
+		{
+			if (vy < -MARIO_JUMP_MAX) {
+				pullDown();
+			}
+		}
+		// Di chuyen nhay phai
+		if (vx > 0) {
+			// vx lon nhat
+			if (vx >= MARIO_SPEED_MAX) {
+				// super jump
+				if (vy < -MARIO_SUPER_JUMP_MAX) {
+					pullDown();
+				}
+			}
+			else if (vx < MARIO_SPEED_MAX && vx > 0) {
+				if (vy < -MARIO_JUMP_MAX) {
+					pullDown();
+				}
+			}
+		}
+		//Di chuyen nhay trai
+		if (vx < 0) {
+			// vx lon nhat
+			if (abs(vx) >= MARIO_SPEED_MAX) {
+				// super jump
+				if (vy < -MARIO_SUPER_JUMP_MAX) {
+					pullDown();
+				}
+			}
+			else if (abs(vx) < MARIO_SPEED_MAX && vx < 0) {
+				if (vy < -MARIO_JUMP_MAX) {
+					pullDown();
+				}
+			}
+		}
+
+	}
 }
 int CMario::GetAniIdSmall()
 {
@@ -693,15 +737,16 @@ void CMario::SetState(int state)
 		if (isSitting) break;
 		if (isOnPlatform)
 		{
-			if (abs(this->vx) == MARIO_RUNNING_SPEED)
-				vy = -MARIO_JUMP_RUN_SPEED_Y;
-			else
-				vy = -MARIO_JUMP_SPEED_Y;
+			if (vy > -MARIO_JUMP_SPEED_MIN)
+				vy = -MARIO_JUMP_SPEED_MIN;
+			ay = -MARIO_ACCELERATION_JUMP;
+			isJumping = true;
 		}
+		isOnPlatform = false;
 		break;
 
 	case MARIO_STATE_RELEASE_JUMP:
-		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
+		pullDown();
 		break;
 
 	case MARIO_STATE_SIT:

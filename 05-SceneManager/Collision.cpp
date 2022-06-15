@@ -351,7 +351,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 						x += dx;
 					if (e->ny < 0) {
 						mario->SetSpeed(vx, 0);
-						//mario->isOnPlatform = true;
+						mario->isOnPlatform = true;
 					}
 					if (e->ny > 0) {
 						y += dy;

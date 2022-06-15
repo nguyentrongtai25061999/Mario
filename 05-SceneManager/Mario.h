@@ -353,6 +353,7 @@ public:
 	BOOLEAN isPipeDown = false;
 	BOOLEAN isTailFlying = false;
 	BOOLEAN isFlappingTailFlying = false;
+	BOOLEAN isJumping = false;
 
 	int coin;
 
@@ -404,6 +405,7 @@ public:
 	void HandleBasicMarioDie();
 	void HandleMarioKicking();
 	void HandleTurning();
+	void HandleMarioJump();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
@@ -412,5 +414,8 @@ public:
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	int GetLevel() {
 		return this->level;
+	}
+	void pullDown() {
+		if (!isFlapping) ay = MARIO_GRAVITY; isJumping = false;
 	}
 };
