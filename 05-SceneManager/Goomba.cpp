@@ -3,6 +3,7 @@
 #include "Brick.h"
 #include "PlayScene.h"
 #include "Mario.h"
+#include "Tail.h"
 CGoomba::CGoomba(int tag)
 {
 	this->ax = 0;//this o class nao la cai do
@@ -97,6 +98,8 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = currentScene->GetPlayer();
 	vy += ay * dt;
 	vx += ax * dt;
 	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
@@ -122,6 +125,22 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vy = -GOOMBA_HIGHJUMP_SPEED;
 		ay = GOOMBA_GRAVITY;
+	}
+	float mLeft, mTop, mRight, mBottom;
+	float oLeft, oTop, oRight, oBottom;
+	if (mario != NULL && state != GOOMBA_STATE_DIE) {
+		if (mario->isTuring && mario->GetLevel() == MARIO_LEVEL_TAIL && state != GOOMBA_STATE_DIE && state != GOOMBA_STATE_DIE_BY_MARIO)
+		{
+			mario->tail->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			GetBoundingBox(oLeft, oTop, oRight, oBottom);
+			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
+			{
+				nx = mario->nx;
+				SetState(GOOMBA_STATE_DIE_BY_MARIO);
+				mario->tail->ShowHitEffect();
+				return;
+			}
+		}
 	}
 
 	CGameObject::Update(dt, coObjects);

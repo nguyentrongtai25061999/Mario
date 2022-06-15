@@ -17,4 +17,5 @@ public:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	void ShowHitEffect() { hit_start = GetTickCount64(); };
 };
