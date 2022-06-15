@@ -335,6 +335,7 @@ public:
 	ULONGLONG untouchable_start;
 	ULONGLONG start_kicking = 0;
 	ULONGLONG start_turning_state = 0;
+	ULONGLONG start_turning = 0;
 	BOOLEAN isOnPlatform = false;
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
@@ -402,6 +403,7 @@ public:
 
 	void HandleBasicMarioDie();
 	void HandleMarioKicking();
+	void HandleTurning();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }

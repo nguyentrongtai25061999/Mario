@@ -18,6 +18,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	HandleMarioKicking();
+	HandleTurning();
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -163,11 +164,11 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 	}
 	if (e->ny > 0) {
 		if (koopas->GetState() == KOOPAS_STATE_IN_SHELL || koopas->GetState() == KOOPAS_STATE_SHELL_UP) {
-			SetState(MARIO_STATE_KICK);
+			//SetState(MARIO_STATE_KICK);
 			koopas->SetState(KOOPAS_STATE_SPINNING);
 		}
 		else {
-			koopas->x = this->x + nx * 2;
+			//koopas->x = this->x + nx * 2;
 			HandleBasicMarioDie();
 		}
 	}
@@ -213,6 +214,20 @@ void CMario::HandleMarioKicking() {
 			SetState(MARIO_STATE_IDLE);
 		}
 	}
+}
+void CMario::HandleTurning() {
+
+	if (GetTickCount64() - start_turning >= MARIO_TURNING_STATE_TIME && isTuring) {
+		start_turning = GetTickCount64();
+		turningStack++;
+	}
+	if (GetTickCount64() - start_turning_state > MARIO_TURNING_TAIL_TIME && isTuring) {
+		isTuring = false;
+		start_turning_state = 0;
+		start_turning = 0;
+		turningStack = 0;
+	}
+
 }
 int CMario::GetAniIdSmall()
 {
