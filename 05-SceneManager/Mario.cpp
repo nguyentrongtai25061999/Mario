@@ -19,6 +19,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	HandleMarioJump();
 	HandleMarioKicking();
 	HandleTurning();
+	HandleFlying();
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -244,7 +245,6 @@ void CMario::HandleMarioJump() {
 		if (vx > 0) {
 			// vx lon nhat
 			if (vx >= MARIO_SPEED_MAX) {
-				// super jump
 				if (vy < -MARIO_SUPER_JUMP_MAX) {
 					pullDown();
 				}
@@ -259,7 +259,6 @@ void CMario::HandleMarioJump() {
 		if (vx < 0) {
 			// vx lon nhat
 			if (abs(vx) >= MARIO_SPEED_MAX) {
-				// super jump
 				if (vy < -MARIO_SUPER_JUMP_MAX) {
 					pullDown();
 				}
@@ -271,6 +270,31 @@ void CMario::HandleMarioJump() {
 			}
 		}
 
+	}
+}
+void CMario::HandleFlying() {
+	if (level == MARIO_LEVEL_TAIL) {
+		if (isFlying || isTailFlying)
+		{
+			if (vy <= -MARIO_NORMAL_FLY_MAX) {
+				normalFlyPullDown = true;
+			}
+		}
+	}
+	if (normalFlyPullDown && isFlying || normalFlyPullDown && isTailFlying) {
+		ay = 0.001f;
+	}
+	if (GetTickCount64() - fly_start > MARIO_FLYING_TIME && fly_start != 0 && isFlying)
+	{
+		fly_start = 0;
+		isRunning = false;
+		isFlying = false;
+	}
+	if (GetTickCount64() - tail_fly_start > MARIO_FLYING_TIME && tail_fly_start != 0 && isTailFlying)
+	{
+		tail_fly_start = 0;
+		isRunning = false;
+		isTailFlying = false;
 	}
 }
 int CMario::GetAniIdSmall()
