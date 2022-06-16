@@ -21,6 +21,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	HandleMarioKicking();
 	HandleTurning();
 	HandleFlying();
+	HandleFlapping();
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -296,6 +297,11 @@ void CMario::HandleFlying() {
 		tail_fly_start = 0;
 		isRunning = false;
 		isTailFlying = false;
+	}
+}
+void CMario::HandleFlapping() {
+	if (level == MARIO_LEVEL_TAIL && isFlapping) {
+		vy = MARIO_SLOW_FALLING_SPEED;
 	}
 }
 int CMario::GetAniIdSmall()

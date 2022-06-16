@@ -411,6 +411,7 @@ public:
 	void HandleTurning();
 	void HandleMarioJump();
 	void HandleFlying();
+	void HandleFlapping();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 	void StartTailFlying() { tail_fly_start = GetTickCount64(); }
 	void StartFlying() { fly_start = GetTickCount64(); }
