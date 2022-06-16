@@ -16,6 +16,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+	if (!isFlying && !isTailFlying)
 	HandleMarioJump();
 	HandleMarioKicking();
 	HandleTurning();
@@ -785,12 +786,14 @@ void CMario::SetState(int state)
 			ay = -MARIO_ACCELERATION_JUMP;
 			isJumping = true;
 		}
-		if (isRunning) {
+		if (abs(ax) == MARIO_ACCEL_RUN_X) {
 			if (level == MARIO_LEVEL_TAIL) {
 				isTailFlying = true;
+				StartTailFlying();
 			}
 			else {
 				isFlying = true;
+				StartFlying();
 			}
 		}
 		isOnPlatform = false;

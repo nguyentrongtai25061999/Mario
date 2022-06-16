@@ -412,6 +412,8 @@ public:
 	void HandleMarioJump();
 	void HandleFlying();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
+	void StartTailFlying() { tail_fly_start = GetTickCount64(); }
+	void StartFlying() { fly_start = GetTickCount64(); }
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 	void StartKicking() { start_kicking = GetTickCount64(); isKick = true; }
