@@ -15,6 +15,8 @@
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
+	/*DebugOut(L"Mario->vy::%f\n", vy);
+	DebugOut(L"Mario->ay::%f\n", ay);*/
 	vx += ax * dt;
 	if (!isFlying && !isTailFlying)
 	HandleMarioJump();

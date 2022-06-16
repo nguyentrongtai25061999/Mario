@@ -64,6 +64,9 @@
     <Filter Include="Map Objects\Others\Tail">
       <UniqueIdentifier>{9d2a1036-f0e6-408d-a274-84e986731b8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Enemies\Items\Leaf">
+      <UniqueIdentifier>{2808218d-8ac9-41db-864b-ecb8ecaabf20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -141,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="Tail.cpp">
       <Filter>Map Objects\Others\Tail</Filter>
+    </ClCompile>
+    <ClCompile Include="Leaf.cpp">
+      <Filter>Map Objects\Enemies\Items\Leaf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +230,9 @@
     </ClInclude>
     <ClInclude Include="Tail.h">
       <Filter>Map Objects\Others\Tail</Filter>
+    </ClInclude>
+    <ClInclude Include="Leaf.h">
+      <Filter>Map Objects\Enemies\Items\Leaf</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
