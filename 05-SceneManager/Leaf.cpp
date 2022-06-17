@@ -17,10 +17,17 @@ void CLeaf::OnNoCollision(DWORD dt) {
 
 void CLeaf::Render()
 {
-	int ani = LEAF_ANI_SET_ID;
+	int ani = 1;
+	if (state == LEAF_STATE_IDLE)
+	{
+		if (vx >= 0)
+			ani = LEAF_ANI_RIGHT;
+		else
+			ani = LEAF_ANI_LEFT;
+	}
 	
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -37,6 +44,10 @@ void CLeaf::SetState(int state) {
 	{
 	case LEAF_STATE_IDLE:
 		vx = vy = 0;
+		break;
+	case LEAF_STATE_UP:
+		vy = -LEAF_SPEED;
+		vx = 0;
 		break;
 	}
 }
