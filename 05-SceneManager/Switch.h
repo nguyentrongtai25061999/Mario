@@ -6,11 +6,13 @@
 #define SWITCH_ANI_SET_ID		77
 #define SWITCH_ANI_IDLE		0
 #define SWITCH_STATE_IDLE		0
+#define SWITCH_STATE_UP			111
 
 class Switch :public CGameObject
 {
 	bool isAppear = false;
 public:
+	float start_y = 0;
 	virtual void Render();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);

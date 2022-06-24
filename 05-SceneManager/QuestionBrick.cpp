@@ -118,6 +118,7 @@ void QuestionBrick::CreateItem(int itemType) {
 		obj->SetAppear(true);
 		obj->SetPosition(x, y);
 		obj->SetZIndex(-1);
+		obj->SetState(SWITCH_STATE_UP);
 		currentScene->AddObject(obj);
 	}
 }
