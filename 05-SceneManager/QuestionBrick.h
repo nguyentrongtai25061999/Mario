@@ -12,6 +12,7 @@
 #define ITEM_MUSHROOM_RED 3
 #define ITEM_LEAF	2
 #define ITEM_MUSHROOM_ANI_SET_ID 37
+#define ITEM_SWITCH		6
 
 
 class QuestionBrick :public CGameObject

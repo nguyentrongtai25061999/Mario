@@ -67,6 +67,9 @@
     <Filter Include="Map Objects\Enemies\Items\Leaf">
       <UniqueIdentifier>{2808218d-8ac9-41db-864b-ecb8ecaabf20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Enemies\Items\Switch">
+      <UniqueIdentifier>{c0a96089-5437-4885-98ad-5506bd8a9f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -150,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="BreakableBrick.cpp">
       <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
+    <ClCompile Include="Switch.cpp">
+      <Filter>Map Objects\Enemies\Items\Switch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="BreakableBrick.h">
       <Filter>Map Objects\Bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="Switch.h">
+      <Filter>Map Objects\Enemies\Items\Switch</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
