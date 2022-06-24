@@ -13,6 +13,7 @@
 #include "PiranhaPlant.h"
 #include "PiranhaPlantFire.h"
 #include "Koopas.h"
+#include "BreakableBrick.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -210,6 +211,9 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 		case OBJECT_TYPE_QUESTIONBRICK:
 			obj = new QuestionBrick(option_tag_1);
 			break;
+		case OBJECT_TYPE_BREAKABLEBRICK:
+			obj = new BreakableBrick(x, y, option_tag_1);
+			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
 			obj = new PiranhaPlant();
 			((PiranhaPlant*)obj)->SetLimitY(y);
@@ -361,6 +365,9 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 		cy = 0;
 	if (cy + sh >= mh)//Bottom Edge
 		cy = mh - sh;
+	//Update CamY when Flying
+	if ( mario->isTailFlying)
+		isTurnOnCamY = true;
 	game->SetCamPos(ceil(cx), ceil(cy));
 	current_map->SetCamPos(cx, cy);
 
