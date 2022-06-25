@@ -212,7 +212,7 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			obj = new QuestionBrick(option_tag_1);
 			break;
 		case OBJECT_TYPE_BREAKABLEBRICK:
-			obj = new BreakableBrick(x, y, option_tag_1);
+			obj = new BreakableBrick(x, y, option_tag_1, option_tag_2, option_tag_3);
 			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
 			obj = new PiranhaPlant();

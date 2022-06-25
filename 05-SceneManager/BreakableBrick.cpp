@@ -1,9 +1,12 @@
 #include "BreakableBrick.h"
 #include "GameObject.h"
 #include "PlayScene.h"
+#include "Coin.h"
 
 void BreakableBrick::Render()
 {
+	if (isDeleted)
+		return;
 	animation_set->at(0)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -11,3 +14,21 @@ void BreakableBrick::Render()
 void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 }
+void BreakableBrick::ChangeToCoin() {
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	vector<LPGAMEOBJECT> objects = currentScene->GetObjects();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(COIN_ANI_SET_ID);
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (dynamic_cast<BreakableBrick*>(objects.at(i)) && !objects.at(i)->isDeleted) {
+			BreakableBrick* bBrick = dynamic_cast<BreakableBrick*>(objects.at(i));
+			CCoin* coin = new CCoin();
+			coin->SetPosition(bBrick->x, bBrick->y);
+			coin->SetAppear(true);
+			coin->SetAnimationSet(ani_set);
+			currentScene->AddObject(coin);
+			bBrick->isDeleted = true;
+		}
+	}
+}	

@@ -829,6 +829,7 @@ void CMario::SetState(int state)
 				StartFlying();
 			}
 		}
+		normalFlyPullDown = false;
 		isOnPlatform = false;
 		break;
 

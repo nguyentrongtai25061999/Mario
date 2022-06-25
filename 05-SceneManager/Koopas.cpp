@@ -176,11 +176,11 @@ void CKoopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 		if ((koopas->state == KOOPAS_STATE_SHELL_UP || koopas->state == KOOPAS_STATE_IN_SHELL)
 			&& state == KOOPAS_STATE_WALKING)
 		{
-			DebugOut(L"OnCollisionWithKoopas else 1 \n");
+			//DebugOut(L"OnCollisionWithKoopas else 1 \n");
 		}
 		if (koopas->state == KOOPAS_STATE_WALKING)
 		{
-			DebugOut(L"OnCollisionWithKoopas - else 2 \n");
+			//DebugOut(L"OnCollisionWithKoopas - else 2 \n");
 			this->vx = -this->vx;
 			this->nx = -this->nx;
 			koopas->vx = -koopas->vx;

@@ -21,6 +21,7 @@ public:
 	void SetState(int state);
 	void SetAppear(bool appear) { this->isAppear = appear; }
 	bool GetIsAppear() { return isAppear; }
+	void ChangeBrickToCoin();
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; }
 };
