@@ -12,6 +12,7 @@
 #include "Koopas.h"
 #include "Tail.h"
 #include"Leaf.h";
+#include"Switch.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -82,6 +83,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<CLeaf*>(e->obj))
 		OnCollisionWithLeaf(e);
+	else if (dynamic_cast<Switch*>(e->obj))
+		OnCollisionWithPSwitch(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -136,6 +139,16 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+}
+void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e) {
+	Switch* sw = dynamic_cast<Switch*>(e->obj);
+	if (e->ny < 0) {
+		if (sw->GetState() != SWITCH_STATE_PRESSED) {
+			sw->SetState(SWITCH_STATE_PRESSED);
+			sw->isDeleted = true;
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
 }
 void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 {

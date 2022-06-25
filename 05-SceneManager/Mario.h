@@ -20,7 +20,7 @@
 #define MARIO_JUMP_SPEED_MIN		0.18f
 #define MARIO_SLOW_FALLING_SPEED	0.05f
 #define MARIO_FLY_SPEED				0.135f
-#define MARIO_JUMP_DEFLECT_SPEED	0.3f
+#define MARIO_JUMP_DEFLECT_SPEED	0.1f
 #define MARIO_JUMP_DEFLECT_INTRO	0.35f
 #define MARIO_GRAVITY				0.0007f
 #define MARIO_DIE_DEFLECT_SPEED		0.3f
@@ -365,6 +365,7 @@ public:
 	void OnCollisionWithMushRoom(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	/*void AddScore(float x, float y, int score, bool isStack = true);
 	void AddCoin() { this->coin++; }*/
 	int GetAniIdBig();

@@ -7,7 +7,9 @@
 #define SWITCH_ANI_IDLE		0
 #define SWITCH_STATE_IDLE		0
 #define SWITCH_STATE_UP			111
-
+#define SWITCH_BBOX_PRESSED_HEIGHT	7
+#define SWITCH_ANI_PRESSED	1
+#define SWITCH_STATE_PRESSED	122
 class Switch :public CGameObject
 {
 	bool isAppear = false;
