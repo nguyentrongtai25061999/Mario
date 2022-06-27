@@ -5,6 +5,7 @@
 #include "Tail.h"
 
 #include "debug.h"
+#include "Portal.h"
 
 #define STACK_SCORE_TIME	2000
 #define MARIO_WALKING_SPEED_START	0.0001f 
@@ -377,8 +378,8 @@ public:
 	bool isReadyToRun = false;
 	int turningStack = 0;
 	CTail* tail = NULL;
-
-public:
+	// switch map
+	CPortal* portal = NULL;
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;

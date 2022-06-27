@@ -137,8 +137,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 }
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
-	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	portal = (CPortal*)e->obj;
 }
 void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e) {
 	Switch* sw = dynamic_cast<Switch*>(e->obj);

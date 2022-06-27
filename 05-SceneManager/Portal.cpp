@@ -2,13 +2,12 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float l, float t, float r, float b, int scene_id )
+CPortal::CPortal(float x, float y, int scene_id)
 {
 	this->scene_id = scene_id;
-	x = l; 
-	y = t;
-	width = r - l;
-	height = b - t;
+	this->start_x = x;
+	this->start_y = y;
+	SetType(IGNORE_DEFINE);
 }
 
 void CPortal::RenderBoundingBox()
@@ -30,6 +29,7 @@ void CPortal::RenderBoundingBox()
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
 	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
+	//DebugOut(L"Portal::renderboundingbox::\n");
 }
 
 void CPortal::Render()
@@ -39,8 +39,8 @@ void CPortal::Render()
 
 void CPortal::GetBoundingBox(float &l, float &t, float &r, float &b)
 {
-	l = x - width/2;
-	t = y - height/2;
-	r = x + width/2;
-	b = y + height/2;
+	l = x - PORTAL_BBOX_WIDTH;
+	t = y - PORTAL_BBOX_HEIGHT;
+	r = x + PORTAL_BBOX_WIDTH;
+	b = y + PORTAL_BBOX_HEIGHT;
 }
