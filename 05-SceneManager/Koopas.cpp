@@ -4,6 +4,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "QuestionBrick.h"
+#include "BreakableBrick.h"
 CKoopas::CKoopas(int tag)
 {
 	this->start_x = x;
@@ -65,6 +66,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKoopas(e);
+	if (dynamic_cast<BreakableBrick*>(e->obj))
+		OnCollisionWithBreakableBrick(e);
 }
 void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 	float mLeft, mTop, mRight, mBottom;
@@ -103,6 +106,14 @@ void CKoopas::OnCollisionWithBrick(LPCOLLISIONEVENT e) {
 		{
 			//vx = -vx;
 			this->nx = -this->nx;
+		}
+	}
+}
+void CKoopas::OnCollisionWithBreakableBrick(LPCOLLISIONEVENT e) {
+	if (state == KOOPAS_STATE_SPINNING) {
+		if (e->nx != 0) {
+			BreakableBrick* tmp = dynamic_cast<BreakableBrick*>(e->obj);
+			tmp->Break();
 		}
 	}
 }

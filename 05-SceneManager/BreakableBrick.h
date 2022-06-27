@@ -2,6 +2,7 @@
 #include "Brick.h"
 
 #define BREAKABLEBRICK_ANI_SET_ID 12
+#define PIECE_ANI_SET_ID	126
 #define COIN_ANI_SET_ID 6
 
 class BreakableBrick :public CBrick
@@ -13,4 +14,5 @@ public:
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 1; }
 	void ChangeToCoin();
+	void Break();
 };

@@ -157,6 +157,9 @@
     <ClCompile Include="Switch.cpp">
       <Filter>Map Objects\Enemies\Items\Switch</Filter>
     </ClCompile>
+    <ClCompile Include="BreakPiece.cpp">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -248,6 +251,9 @@
     </ClInclude>
     <ClInclude Include="Switch.h">
       <Filter>Map Objects\Enemies\Items\Switch</Filter>
+    </ClInclude>
+    <ClInclude Include="BreakPiece.h">
+      <Filter>Map Objects\Bricks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
