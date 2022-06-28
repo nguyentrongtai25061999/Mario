@@ -28,6 +28,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	HandleFlying();
 	HandleFlapping();
 	HandleSwitchMap();
+	HandleFinishScene();
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -230,6 +231,7 @@ void CMario::OnCollisionWithPCardItem(LPCOLLISIONEVENT e) {
 	if (e->ny != 0 || e->nx != 0) {
 		card->SetAppear(false);
 		card->isDeleted = true;
+		isFinish = true;
 	}
 }
 void CMario::HandleBasicMarioDie() {
@@ -372,6 +374,14 @@ void CMario::HandleFlying() {
 void CMario::HandleFlapping() {
 	if (level == MARIO_LEVEL_TAIL && isFlapping) {
 		vy = MARIO_SLOW_FALLING_SPEED;
+	}
+}
+void CMario::HandleFinishScene() {
+	if (isFinish) {
+		ax = MARIO_ACCELERATION;
+		ay = MARIO_GRAVITY;
+		nx = 1;
+		SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 }
 int CMario::GetAniIdSmall()

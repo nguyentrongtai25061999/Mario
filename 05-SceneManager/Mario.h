@@ -381,6 +381,7 @@ public:
 	int GetAniIdTail();
 
 	BOOLEAN isTuring = false;
+	bool isFinish = false;
 	bool isRunning = false;
 	bool isReadyToRun = false;
 	int turningStack = 0;
@@ -422,6 +423,7 @@ public:
 	void HandleFlying();
 	void HandleFlapping();
 	void HandleSwitchMap();
+	void HandleFinishScene();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 	void StartTailFlying() { tail_fly_start = GetTickCount64(); }
 	void StartFlying() { fly_start = GetTickCount64(); }
