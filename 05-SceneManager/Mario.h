@@ -360,9 +360,13 @@ public:
 	BOOLEAN isJumping = false;
 	BOOLEAN isSwitchMap = false;
 	BOOLEAN isfast = false;
-
-	int coin;
-
+	//HUD
+	int marioScore = 0;
+	int marioLife = 4;
+	int speedStack = 0;
+	int coin = 0;
+	//CARD
+		vector<int> cards;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
