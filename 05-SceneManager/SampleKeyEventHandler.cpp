@@ -14,6 +14,7 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_DOWN:
+		mario->isSwitchMap = true;
 		mario->SetState(MARIO_STATE_SIT);
 		break;
 	case DIK_S:
@@ -48,6 +49,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_R: // reset
 		//Reload();
 		break;
+	case DIK_T: // travel to secret map
+		mario->Travel();
+		break;
 	}
 }
 
@@ -62,6 +66,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 		mario->isFlapping = false;
 		mario->isFlappingTailFlying = false;
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
+		mario->isSwitchMap = false;
 		break;
 	case DIK_A:
 		if (mario->isHolding) {

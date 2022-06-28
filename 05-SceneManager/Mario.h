@@ -338,6 +338,8 @@ public:
 	ULONGLONG start_turning = 0;
 	ULONGLONG fly_start = 0;
 	ULONGLONG tail_fly_start = 0;
+	ULONGLONG pipeUpTimer = 0;
+	ULONGLONG pipeDownTimer = 0;
 	BOOLEAN isOnPlatform = false;
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
@@ -356,6 +358,8 @@ public:
 	BOOLEAN isTailFlying = false;
 	BOOLEAN isFlappingTailFlying = false;
 	BOOLEAN isJumping = false;
+	BOOLEAN isSwitchMap = false;
+	BOOLEAN isfast = false;
 
 	int coin;
 
@@ -414,6 +418,7 @@ public:
 	void HandleMarioJump();
 	void HandleFlying();
 	void HandleFlapping();
+	void HandleSwitchMap();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 	void StartTailFlying() { tail_fly_start = GetTickCount64(); }
 	void StartFlying() { fly_start = GetTickCount64(); }
@@ -427,5 +432,24 @@ public:
 	}
 	void pullDown() {
 		if (!isFlapping) ay = MARIO_GRAVITY; isJumping = false;
+	}
+	void StartPipeUp() {
+		pipeUpTimer = GetTickCount64();
+		isPipeUp = true;
+
+	}
+	void StartPipeDown() {
+		pipeDownTimer = GetTickCount64();
+		isPipeDown = true;
+	}
+	//travel to secret map
+	void Travel() { x = 2275; y = 0; };
+	void StopPipeUp() {
+		pipeUpTimer = 0;
+		isPipeUp = false;
+	}
+	void StopPipeDown() {
+		pipeDownTimer = 0;
+		isPipeDown = false;
 	}
 };

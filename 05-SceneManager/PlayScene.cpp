@@ -336,6 +336,11 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	player->Update(dt, &coObjects);
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario->isfast) {
+		player->Update(dt*1.05, &coObjects);
+	}
+	else{ player->Update(dt, &coObjects); }
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -364,7 +369,12 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 	if (cx >= mw - sw)//Right Edge
 		cx = mw - sw;
 
+	if (mario->isFlying || mario->isTailFlying|| mario->GetLevel() == MARIO_LEVEL_TAIL)
+		isTurnOnCamY = true;
+	else if ( mario->GetLevel() != MARIO_LEVEL_TAIL)
+		isTurnOnCamY = false;
 	//CamY
+
 	if (isTurnOnCamY)
 		cy -= sh / 2;
 	else
@@ -376,16 +386,13 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 	if (cy + sh >= mh)//Bottom Edge
 		cy = mh - sh;
 	//Update CamY when Flying
-	if ( mario->isTailFlying)
-		isTurnOnCamY = true;
 	game->SetCamPos(ceil(cx), ceil(cy));
 	current_map->SetCamPos(cx, cy);
-
 }
 void CPlayScene::Render()
 {
-	player->Render();
 	current_map->DrawMap();
+	player->Render();
 	// sort object to render by Z
 	sort(this->objects.begin(), this->objects.end(), [](const CGameObject* lObj, const CGameObject* rObj) {
 	return lObj->z < rObj->z;

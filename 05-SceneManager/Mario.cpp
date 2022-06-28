@@ -26,6 +26,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	HandleTurning();
 	HandleFlying();
 	HandleFlapping();
+	HandleSwitchMap();
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -257,6 +258,39 @@ void CMario::HandleTurning() {
 		turningStack = 0;
 	}
 
+}
+void CMario::HandleSwitchMap() {
+	if (pipeDownTimer > MARIO_PIPE_TIME && isPipeDown)
+	{
+		StopPipeDown();
+		if (isSwitchMap)
+		{
+			isfast = true;
+			/*DebugOut(L"switchmap\n");*/
+			StopPipeDown();
+			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
+		}
+		else
+		{
+			vx = vy = 0;
+			ay = MARIO_GRAVITY;
+		}
+
+	}
+
+	else if (pipeUpTimer > MARIO_PIPE_TIME && isPipeUp)
+	{
+		StopPipeUp();
+		if (isSwitchMap)
+		{
+			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
+		}
+		else
+		{
+			vx = vy = 0;
+			ay = MARIO_GRAVITY;
+		}
+	}
 }
 void CMario::HandleMarioJump() {
 	if (isJumping) {
