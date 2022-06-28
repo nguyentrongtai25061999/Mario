@@ -363,6 +363,7 @@ public:
 
 	int coin;
 
+
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
@@ -371,6 +372,8 @@ public:
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
+	void OnCollisionWithPCardItem(LPCOLLISIONEVENT e);
+
 	/*void AddScore(float x, float y, int score, bool isStack = true);
 	void AddCoin() { this->coin++; }*/
 	int GetAniIdBig();

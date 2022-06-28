@@ -8,6 +8,8 @@ Resources\Tilemap\world1-1.txt
 # State: 0 = Walk; 1 = Max Speed; 2 = Jump; 3 = Brake; 4 = Sitdown; 5 = Hold; 6 = Fly, 7 = Kick 
 # Direction: 0 = Right; 1 = Left, null = Idle
 # Serial: Optional
+# ====	HUD ====
+99999	11	1	272	32	60
 # ---- icon MARIO ---- 
 50003	15	160	33	169	80
  ---- icon Lugi ---- 
@@ -999,6 +1001,8 @@ Resources\Tilemap\world1-1.txt
 # ---- Left ----
 7210	71110	100
 7211	71111	100
+# ==== HUD ====
+8000	99999	100
 # ==== Point100 ====
 8001	50049	100
 # ==== Point400 ====
@@ -1107,6 +1111,8 @@ Resources\Tilemap\world1-1.txt
 72	7100	7101	7110	7111	1420
 # COURSE CLEAR
 73	5069
+# HUD
+127	8000
 # Font
 134	8006	8007	8008	8009	8010	8011	8012	8013	8014	8015
 # Point100
@@ -1121,3 +1127,14 @@ Resources\Tilemap\world1-1.txt
 133	8005
 [OBJECTS]
 Resources\Scene\World1-1\world1-1.txt
+[EXTRA INFORMATION]
+# HUD First Point Position
+1	58	4
+# HUD Last Money Position
+2	146	-4
+# Camera standard y coordinate
+3	238	
+# Camera furthest y coordinate
+4	2894
+# Mario's max x coordinate
+5	2802

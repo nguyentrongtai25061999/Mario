@@ -13,6 +13,7 @@
 #include "Tail.h"
 #include"Leaf.h";
 #include"Switch.h"
+#include"Card.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -86,6 +87,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithLeaf(e);
 	else if (dynamic_cast<Switch*>(e->obj))
 		OnCollisionWithPSwitch(e);
+	else if (dynamic_cast<CardItem*>(e->obj))
+		OnCollisionWithPCardItem(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -220,6 +223,13 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 		if (level != MARIO_LEVEL_TAIL) SetLevel(MARIO_LEVEL_TAIL);
 		leaf->SetAppear(false);
 		e->obj->Delete();
+	}
+}
+void CMario::OnCollisionWithPCardItem(LPCOLLISIONEVENT e) {
+	CardItem* card = dynamic_cast<CardItem*>(e->obj);
+	if (e->ny != 0 || e->nx != 0) {
+		card->SetAppear(false);
+		card->isDeleted = true;
 	}
 }
 void CMario::HandleBasicMarioDie() {

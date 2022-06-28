@@ -160,6 +160,9 @@
     <ClCompile Include="BreakPiece.cpp">
       <Filter>Map Objects\Bricks</Filter>
     </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -254,6 +257,9 @@
     </ClInclude>
     <ClInclude Include="BreakPiece.h">
       <Filter>Map Objects\Bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Map Objects\Others</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

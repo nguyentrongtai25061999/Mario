@@ -14,6 +14,7 @@
 #include "PiranhaPlantFire.h"
 #include "Koopas.h"
 #include "BreakableBrick.h"
+#include"Card.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -251,6 +252,10 @@ void CPlayScene::LoadObjects(LPCWSTR assetFile)
 			obj->SetTag(isToExtraScene);
 			break;
 		}
+		case OBJECT_TYPE_CARD: {
+			obj = new CardItem();
+			break;
+		}
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -335,12 +340,15 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
-	player->Update(dt, &coObjects);
+	//player->Update(dt, &coObjects);
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (mario->isfast) {
-		player->Update(dt*1.05, &coObjects);
+		player->Update(dt*1.5, &coObjects);
 	}
-	else{ player->Update(dt, &coObjects); }
+	else
+	{
+		player->Update(dt, &coObjects);
+	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{

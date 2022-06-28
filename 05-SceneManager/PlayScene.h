@@ -8,7 +8,6 @@
 #include "Goomba.h"
 #include "Map.h"
 
-
 class CPlayScene : public CScene
 {
 protected:
