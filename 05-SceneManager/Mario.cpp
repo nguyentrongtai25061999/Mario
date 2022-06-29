@@ -1010,7 +1010,24 @@ void CMario::SetLevel(int l)
 
 void CMario::AddScore(float x, float y, int score, bool isStack) {
 	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	start_score_time = GetTickCount64();
 
+	if (isStack) {
+		if (!isStackingScore) {
+			isStackingScore = true;
+		}
+		else {
+			if (stackScoreTimes == 5) {
+				score *= 10;
+				stackScoreTimes = 5;
+			}
+			else {
+				score = score * (int)(pow(2, stackScoreTimes));
+			}
+		}
+
+		stackScoreTimes++;
+	}
 	Point* point = new Point(score);
 	int previousScore = score;
 

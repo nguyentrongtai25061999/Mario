@@ -17,6 +17,7 @@
 
 class Point : public CGameObject
 {
+    DWORD start_exist = 0;
     virtual void Render();
     virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 public:

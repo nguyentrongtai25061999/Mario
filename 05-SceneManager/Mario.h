@@ -332,6 +332,8 @@ public:
 
 	int level;
 	int untouchable;
+	int stackScoreTimes = 0;
+
 	ULONGLONG untouchable_start;
 	ULONGLONG start_kicking = 0;
 	ULONGLONG start_turning_state = 0;
@@ -342,6 +344,8 @@ public:
 	ULONGLONG pipeDownTimer = 0;
 	ULONGLONG start_running = 0;
 	ULONGLONG running_stop = 0;
+	ULONGLONG start_score_time = 0;
+
 	BOOLEAN isOnPlatform = false;
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
@@ -362,6 +366,7 @@ public:
 	BOOLEAN isJumping = false;
 	BOOLEAN isSwitchMap = false;
 	BOOLEAN isfast = false;
+	BOOLEAN isStackingScore = false;
 	//HUD
 	int marioScore = 0;
 	int marioLife = 4;
