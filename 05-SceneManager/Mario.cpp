@@ -29,6 +29,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	HandleFlapping();
 	HandleSwitchMap();
 	HandleFinishScene();
+	HandleSpeedStack();
+
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
 	// reset untouchable timer if untouchable time has passed
@@ -269,7 +271,27 @@ void CMario::HandleTurning() {
 		start_turning = 0;
 		turningStack = 0;
 	}
-
+}
+void CMario::HandleSpeedStack() {
+	if (GetTickCount64() - start_running > MARIO_RUNNING_STACK_TIME && vx != 0 && isRunning && isReadyToRun) {
+		start_running = GetTickCount64();
+		speedStack++;
+		//DebugOut(L"HandleSpeedStack::%d\n", speedStack);
+		if (speedStack > MARIO_RUNNING_STACKS) {
+			speedStack = MARIO_RUNNING_STACKS;
+		}
+	}
+	if (GetTickCount64() - running_stop > MARIO_SPEED_STACK_LOST_TIME && !isRunning)
+	{
+		running_stop = GetTickCount64();
+		speedStack--;
+		if (speedStack < 0)
+		{
+			speedStack = 0;
+			isRunning = false;
+			isFlying = false;
+		}
+	}
 }
 void CMario::HandleSwitchMap() {
 	if (pipeDownTimer > MARIO_PIPE_TIME && isPipeDown)
@@ -369,6 +391,7 @@ void CMario::HandleFlying() {
 		tail_fly_start = 0;
 		isRunning = false;
 		isTailFlying = false;
+		speedStack = 0;
 	}
 }
 void CMario::HandleFlapping() {
@@ -826,8 +849,10 @@ void CMario::SetState(int state)
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
 		isReadyToRun = true;
+		DebugOut(L"vx:: %f \n", vx);
 		//runningStack++;
-		if (vx > MARIO_SPEED_STACK && isReadyToRun) {
+		if (vx > MARIO_SPEED_STACK && isReadyToRun) {	
+			DebugOut(L"isRunning true \n");
 			isRunning = true;
 		}
 		else {
@@ -855,6 +880,13 @@ void CMario::SetState(int state)
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
 		isRunning = false;
+		/*if (ax < 0 && abs(vx) > MARIO_WALKING_SPEED_START) {
+			isChangeDirection = true;
+			runningStack = 0;
+		}
+		else {
+			runningStack++;
+		}*/
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		if (isSitting) break;
@@ -862,6 +894,13 @@ void CMario::SetState(int state)
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		isRunning = false;
+		/*if (ax > 0 && abs(vx) > MARIO_WALKING_SPEED_START) {
+			isChangeDirection = true;
+			runningStack = 0;
+		}
+		else {
+			runningStack++;
+		}*/
 		break;
 	case MARIO_STATE_JUMP:
 		if (isSitting) break;

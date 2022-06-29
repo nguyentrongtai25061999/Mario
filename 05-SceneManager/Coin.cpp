@@ -60,8 +60,6 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		{
 			isAppear = false;
 			SetState(COIN_STATE_IDLE);
-			/*mario->AddScore(this->x, this->y, 100, false);
-			mario->AddCoin();*/
 			Delete();
 		}
 	}

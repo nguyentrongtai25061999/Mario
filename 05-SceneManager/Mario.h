@@ -12,7 +12,7 @@
 #define MARIO_WALKING_SPEED_MAX		0.15f
 #define MARIO_RUNNING_SPEED_MAX		0.2f
 #define MARIO_SPEED_MAX				0.25f
-#define MARIO_SPEED_STACK			0.15f
+#define MARIO_SPEED_STACK			0.09f
 #define MARIO_ACCELERATION			0.0007f
 #define MARIO_WALKING_SPEED_MIN		0.05f
 
@@ -154,7 +154,7 @@
 #define MARIO_ANI_FIRE_WALKING_LEFT			55
 #define MARIO_ANI_FIRE_WALKING_FAST_LEFT	56
 #define MARIO_ANI_FIRE_RUNNING_LEFT			57
-#define MARIO_ANI_FIRE_JUMPINGUP_LEFT		58
+//#define MARIO_ANI_FIRE_JUMPINGUP_LEFT		58
 #define MARIO_ANI_FIRE_JUMPINGDOWN_LEFT		59
 #define MARIO_ANI_FIRE_BRAKING_LEFT			60
 #define MARIO_ANI_FIRE_SITTING_LEFT			61
@@ -340,6 +340,8 @@ public:
 	ULONGLONG tail_fly_start = 0;
 	ULONGLONG pipeUpTimer = 0;
 	ULONGLONG pipeDownTimer = 0;
+	ULONGLONG start_running = 0;
+	ULONGLONG running_stop = 0;
 	BOOLEAN isOnPlatform = false;
 	BOOLEAN isHolding = false;
 	BOOLEAN isReadyToHold = false;
@@ -378,8 +380,6 @@ public:
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 	void OnCollisionWithPCardItem(LPCOLLISIONEVENT e);
 
-	/*void AddScore(float x, float y, int score, bool isStack = true);
-	void AddCoin() { this->coin++; }*/
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdTail();
@@ -388,6 +388,7 @@ public:
 	bool isFinish = false;
 	bool isRunning = false;
 	bool isReadyToRun = false;
+	int runningStack = 0;
 	int turningStack = 0;
 	CTail* tail = NULL;
 	// switch map
@@ -428,6 +429,7 @@ public:
 	void HandleFlapping();
 	void HandleSwitchMap();
 	void HandleFinishScene();
+	void HandleSpeedStack();
 	void StartTurning() { start_turning_state = GetTickCount64(); isTuring = true; }
 	void StartTailFlying() { tail_fly_start = GetTickCount64(); }
 	void StartFlying() { fly_start = GetTickCount64(); }
