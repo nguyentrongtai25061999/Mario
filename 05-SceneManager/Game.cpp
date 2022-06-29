@@ -7,7 +7,7 @@
 #include "Textures.h"
 #include "Animations.h"
 #include "PlayScene.h"
-
+#include "IntroScene.h"
 CGame* CGame::__instance = NULL;
 
 /*
@@ -456,9 +456,16 @@ void CGame::_ParseSection_SCENES(string line)
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
-
-	LPSCENE scene = new CPlayScene(id, path);
-	scenes[id] = scene;
+	if (id == 1 || id == 2)
+	{
+		LPSCENE playscene = new CPlayScene(id, path);
+		scenes[id] = playscene;
+	}
+	if (id == 5)
+	{
+		LPSCENE introscene = new CIntroScene(id, path);
+		scenes[id] = introscene;
+	}
 }
 
 /*
@@ -505,19 +512,20 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
-	SwitchScene();
+	SwitchScene(current_scene);
 }
 
-void CGame::SwitchScene()
+void CGame::SwitchScene(int scene_id)
 {
 	if (next_scene < 0 || next_scene == current_scene) return;
 
 	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
 
-	scenes[current_scene]->Unload();
+	scenes[next_scene]->Unload();
 
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
+	CAnimationSets::GetInstance()->Clear();
 
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
@@ -561,6 +569,7 @@ void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pi
 void CGame::InitiateSwitchScene(int scene_id)
 {
 	next_scene = scene_id;
+	SwitchScene(next_scene);
 }
 
 
