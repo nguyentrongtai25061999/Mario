@@ -14,6 +14,8 @@
 #include"Leaf.h";
 #include"Switch.h"
 #include"Card.h"
+#include"Point.h"
+#include"PlayScene.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -138,8 +140,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
-	///*AddScore(this->x, this->y, 100, false);
-	//AddCoin();*/
+	AddScore(this->x, this->y, 100, false);
+	AddCoin();
 	coin++;
 }
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -170,6 +172,7 @@ void CMario::OnCollisionWithMushRoom(LPCOLLISIONEVENT e)
 {
 	CMushRoom* mushRoom = dynamic_cast<CMushRoom*>(e->obj);
 	mushRoom->Delete();
+	AddScore(this->x, this->y, 100);
 	SetLevel(MARIO_LEVEL_BIG);
 }
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
@@ -217,6 +220,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 		else if (koopas->GetState() == KOOPAS_STATE_SPINNING) {
 			koopas->SetState(KOOPAS_STATE_IN_SHELL);
 		}
+		AddScore(this->x, this->y, 100);
 	}
 }
 void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
@@ -225,6 +229,8 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 	if (e->ny != 0 || e->nx != 0) {
 		if (level != MARIO_LEVEL_TAIL) SetLevel(MARIO_LEVEL_TAIL);
 		leaf->SetAppear(false);
+		leaf->vy = 50.0f;
+		AddScore(this->x, this->y, 1000);
 		e->obj->Delete();
 	}
 }
@@ -233,6 +239,7 @@ void CMario::OnCollisionWithPCardItem(LPCOLLISIONEVENT e) {
 	if (e->ny != 0 || e->nx != 0) {
 		card->SetAppear(false);
 		card->isDeleted = true;
+		AddCard(card->state - 1);
 		isFinish = true;
 	}
 }
@@ -880,13 +887,13 @@ void CMario::SetState(int state)
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
 		isRunning = false;
-		/*if (ax < 0 && abs(vx) > MARIO_WALKING_SPEED_START) {
+		if (ax < 0 && abs(vx) > MARIO_WALKING_SPEED_START) {
 			isChangeDirection = true;
 			runningStack = 0;
 		}
 		else {
 			runningStack++;
-		}*/
+		}
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		if (isSitting) break;
@@ -894,13 +901,13 @@ void CMario::SetState(int state)
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		isRunning = false;
-		/*if (ax > 0 && abs(vx) > MARIO_WALKING_SPEED_START) {
+		if (ax > 0 && abs(vx) > MARIO_WALKING_SPEED_START) {
 			isChangeDirection = true;
 			runningStack = 0;
 		}
 		else {
 			runningStack++;
-		}*/
+		}
 		break;
 	case MARIO_STATE_JUMP:
 		if (isSitting) break;
@@ -999,5 +1006,18 @@ void CMario::SetLevel(int l)
 		y -= MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT;
 	}
 	level = l;
+}
+
+void CMario::AddScore(float x, float y, int score, bool isStack) {
+	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
+	Point* point = new Point(score);
+	int previousScore = score;
+
+	point->SetPosition(x, y);
+	currentScene->AddObject(point);
+
+	this->marioScore += score;
+
 }
 

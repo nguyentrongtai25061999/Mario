@@ -82,6 +82,7 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			mario->tail->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 
 			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->isTuring) {
+				mario->AddScore(x, y, 100);
 				SetState(PIRANHAPLANT_STATE_DEATH);
 				 DebugOut(L">>> PRANHAPLANT DIE >>> \n");
 				mario->tail->ShowHitEffect();

@@ -154,7 +154,7 @@
 #define MARIO_ANI_FIRE_WALKING_LEFT			55
 #define MARIO_ANI_FIRE_WALKING_FAST_LEFT	56
 #define MARIO_ANI_FIRE_RUNNING_LEFT			57
-//#define MARIO_ANI_FIRE_JUMPINGUP_LEFT		58
+#define MARIO_ANI_FIRE_JUMPINGUP_LEFT		58
 #define MARIO_ANI_FIRE_JUMPINGDOWN_LEFT		59
 #define MARIO_ANI_FIRE_BRAKING_LEFT			60
 #define MARIO_ANI_FIRE_SITTING_LEFT			61
@@ -367,6 +367,10 @@ public:
 	int marioLife = 4;
 	int speedStack = 0;
 	int coin = 0;
+	void AddScore(float x, float y, int score, bool isStack = true);
+	void AddCoin() { this->coin++; }
+	void AddCard(int cardId) { cards.push_back(cardId); }
+	void AddMarioLife(int life) { marioLife += life; }
 	//CARD
 		vector<int> cards;
 

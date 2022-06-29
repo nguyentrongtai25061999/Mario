@@ -105,6 +105,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
+		mario->AddScore(this->x, this->y, 100);
 		return;
 	}
 	if ((tag == GOOMBA_RED) && state != GOOMBA_STATE_DIE && state != GOOMBA_STATE_DIE_BY_MARIO)
@@ -135,6 +136,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			GetBoundingBox(oLeft, oTop, oRight, oBottom);
 			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
 			{
+				mario->AddScore(x, y, 100);
 				nx = mario->nx;
 				SetState(GOOMBA_STATE_DIE_BY_MARIO);
 				mario->tail->ShowHitEffect();

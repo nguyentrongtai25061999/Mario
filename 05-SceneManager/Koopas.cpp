@@ -181,6 +181,7 @@ void CKoopas::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
 		if (koopas->tag == KOOPAS_GREEN_PARA)
 			koopas->tag = KOOPAS_GREEN;
 		SetState(KOOPAS_STATE_DEATH);
+		mario->AddScore(x, y, 100, true);
 	}
 	else
 	{
