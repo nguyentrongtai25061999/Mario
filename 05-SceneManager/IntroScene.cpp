@@ -136,7 +136,7 @@ void CIntroScene::_ParseSection_OBJECTS(string line) {
 void CIntroScene::Update(DWORD dt) {
 	if (switchTimer >= SWITCH_TIME && isSwitch) {
 		DebugOut(L"SWITCH MAP");
-		CGame::GetInstance()->InitiateSwitchScene(1);
+		CGame::GetInstance()->InitiateSwitchScene(0);
 	}
 }
 

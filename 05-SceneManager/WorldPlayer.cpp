@@ -3,9 +3,11 @@
 #include "WorldPlayer.h"
 #include "WorldScene.h"
 #include "debug.h"
+#include "WorldMapObjects.h"
 
 CWorldPlayer::CWorldPlayer(float x, float y) : CGameObject()
 {
+	SetLevel(2);
 	SetState(PLAYER_STATE_IDLE);
 	start_x = x;
 	start_y = y;
@@ -24,6 +26,27 @@ void CWorldPlayer::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 };
+void CWorldPlayer::OnCollisionWith(LPCOLLISIONEVENT e)
+{
+	SetState(PLAYER_STATE_IDLE);
+	DebugOut(L"OnCollisionWith");
+	if (e->obj->tag == OBJECT_TYPE_PORTAL || e->obj->tag == OBJECT_TYPE_STOP)
+	{
+		OnCollisionWithPortalOrStop(e);
+	}
+}
+void CWorldPlayer::OnCollisionWithPortalOrStop(LPCOLLISIONEVENT e)
+{
+	CWorldMapObject* tmp = dynamic_cast<CWorldMapObject*>(e->obj);
+	bool cl, cr, cu, cd;
+	tmp->GetMove(cl, cu, cr, cd);
+	SetMove(cl, cu, cr, cd);
+
+	if (e->obj->tag == OBJECT_TYPE_PORTAL)
+		sceneId = tmp->GetSceneId();
+	else
+		sceneId = -1;
+}
 void CWorldPlayer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);

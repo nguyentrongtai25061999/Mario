@@ -181,6 +181,9 @@
     <ClCompile Include="WorldPlayer.cpp">
       <Filter>Map Objects\WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="WorldMapObjects.cpp">
+      <Filter>Map Objects\WorldMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -292,6 +295,9 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="WorldPlayer.h">
+      <Filter>Map Objects\WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapObjects.h">
       <Filter>Map Objects\WorldMap</Filter>
     </ClInclude>
   </ItemGroup>

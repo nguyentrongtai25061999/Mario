@@ -16,11 +16,12 @@
 #define PLAYER_BBOX_WIDTH			8	
 class CWorldPlayer : public CGameObject
 {
-	float start_x;			// initial position of Mario at scene
+	float start_x;// initial position of Mario at scene
 	float start_y;
 	int level;
 public:
 	bool cgLeft, cgRight, cgUp, cgDown;
+	int sceneId;
 	CWorldPlayer(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -34,8 +35,14 @@ public:
 		cgUp = cUp;
 		cgDown = cDown;
 	};
+	void ChooseScene()
+	{
+		CGame::GetInstance()->InitiateSwitchScene(1);
+	}
 
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 1; }
 	virtual void OnNoCollision(DWORD dt);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
+	virtual void OnCollisionWithPortalOrStop(LPCOLLISIONEVENT e);
 };

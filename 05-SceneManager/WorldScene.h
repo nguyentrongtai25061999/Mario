@@ -6,6 +6,8 @@
 #include "WorldPlayer.h"
 
 #define OBJECT_TYPE_PLAYER 0
+#define OBJECT_TYPE_STOP 2
+#define OBJECT_TYPE_PORTAL 3
 
 class CWorldScene : public CScene
 {

@@ -6,7 +6,11 @@
 #include "Sprites.h"
 #include "Brick.h"
 #include "debug.h"
+#include "WorldMapObjects.h"
+#include "Mario.h"
 using namespace std;
+
+#define WORLDOBJECT		10
 
 CWorldScene::CWorldScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
@@ -113,6 +117,27 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 		obj = new CWorldPlayer(x, y);
 		player = (CWorldPlayer*)obj;
 		//DebugOut(L"[INFO] Player object created! %f %f\n", x, y);
+		break;
+	case WORLDOBJECT:
+		if (tag == OBJECT_TYPE_PORTAL || tag == OBJECT_TYPE_STOP)
+		{
+			bool cgLeft, cgRight, cgUp, cgDown;
+			cgLeft = atof(tokens[5].c_str());
+			cgUp = atof(tokens[6].c_str());
+			cgRight = atof(tokens[7].c_str());
+			cgDown = atof(tokens[8].c_str());
+			int sceneid = atof(tokens[9].c_str());
+			obj = new CWorldMapObject(sceneid);
+			((CWorldMapObject*)obj)->SetMove(cgLeft, cgUp, cgRight, cgDown);
+			obj->SetTag(tag);
+		}
+		else
+		{
+			obj = new CWorldMapObject();
+			obj->SetTag(tag);
+			if (tag == OBJECT_TYPE_HAMMER)
+				obj->SetSpeed(MARIO_WALKING_SPEED_MIN / 2, 0);
+		}
 		break;
 	default:
 		//DebugOut(L"[ERR0R] Invalid object type: %d\n", object_type);
@@ -272,6 +297,13 @@ void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_DOWN:
 			if (player->cgDown)
 				player->SetState(PLAYER_STATE_DOWN);
+			break;
+		case DIK_S:
+			if (player->sceneId > 0)
+			{
+				DebugOut(L"mario ChooseScene");
+				player->ChooseScene();
+			}
 			break;
 		}
 	}

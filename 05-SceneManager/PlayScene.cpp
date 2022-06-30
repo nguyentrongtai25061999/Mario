@@ -372,9 +372,9 @@ void CPlayScene::SetCam(float cx, float cy, DWORD dt) {
 	CGame* game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	sw = game->GetBackBufferWidth();
-	sh = game->GetBackBufferHeight()-32 ;
-	mw = current_map->GetMapWidth();
-	mh = current_map->GetMapHeight();
+	sh = game->GetBackBufferHeight() -32;
+	mw = current_map->GetMapWidth() -11;
+	mh = current_map->GetMapHeight() -11;
 	cx -= sw / 2;
 	// CamX
 	if (cx <= 0)//Left Edge
