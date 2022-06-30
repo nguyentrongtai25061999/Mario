@@ -13,13 +13,17 @@
 #define ITEM_LEAF	2
 #define ITEM_MUSHROOM_ANI_SET_ID 37
 #define ITEM_SWITCH		6
-
+#define QUESTIONBRICK_PUSH_MAX_HEIGHT 8
+#define ITEM_MUSHROOM_GREEN 4
+#define MUSHROOM_ANI_GREEN_ID	37
 
 class QuestionBrick :public CGameObject
 {
 	LPGAMEOBJECT item;
 	int tag;
 	int totalItems = 1;
+	bool isBeingPushedUp = false;
+	bool isFallingDown = false;
 public:
 	CGameObject* obj = NULL;
 	QuestionBrick(int tag = ITEM_COIN_QUESTION_BRICK_COIN);
@@ -38,5 +42,7 @@ public:
 	void SetState(int state);
 	void CreateItem(int itemType = ITEM_COIN_QUESTION_BRICK_COIN);
 	CGameObject* SetUpItem(int itemType);
+	void startPushedUp();
+	void stopPushedUp();
 	~QuestionBrick();
 };

@@ -9,6 +9,7 @@
 #define MUSHROOM_STATE_LEFT	-1
 #define MUSHROOM_STATE_RIGHT 1
 #define MUSHROOM_GRAVITY 0.2f
+#define MUSHROOM_GREEN	4
 
 class CMushRoom :public CGameObject
 {

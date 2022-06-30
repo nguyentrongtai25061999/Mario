@@ -8,7 +8,10 @@ CMushRoom::CMushRoom(int type) {
 
 void CMushRoom::Render() {
 	if (isAppear && !isDeleted) {
-	 animation_set->at(0)->Render(x, y);
+		if (typeMushRoom == MUSHROOM_GREEN) {
+			animation_set->at(1)->Render(x, y);
+		}
+		else animation_set->at(0)->Render(x, y);
 	}
 	//RenderBoundingBox();
 }

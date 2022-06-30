@@ -63,12 +63,19 @@ void QuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	}
 	if (state == QUESTION_BRICK_HIT) {
+		if (isBeingPushedUp && start_y - y >= QUESTIONBRICK_PUSH_MAX_HEIGHT) {
+			stopPushedUp();
+		}
+		if (isFallingDown && y >= start_y) {
+			y = start_y;
+			isFallingDown = false;
+			vy = 0;
+			if (tag != ITEM_COIN_QUESTION_BRICK_COIN) {
+				CreateItem(tag);
+			}
+		}
 		if (tag == ITEM_COIN_QUESTION_BRICK_COIN) {
 			CreateItem(tag);
-		}
-		if (tag != ITEM_COIN_QUESTION_BRICK_COIN) {
-			CreateItem(tag);
-			//DebugOut(L"Mushroom \n");
 		}
 	}
 }
@@ -153,6 +160,12 @@ CGameObject* QuestionBrick::SetUpItem(int itemType) {
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
 		}
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL) {
+			obj = new CMushRoom(MUSHROOM_GREEN);
+			ani_set_id = MUSHROOM_ANI_GREEN_ID;
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			obj->SetAnimationSet(ani_set);
+		}
 	}
 	if (itemType == ITEM_SWITCH) {
 		obj = new Switch();
@@ -160,7 +173,22 @@ CGameObject* QuestionBrick::SetUpItem(int itemType) {
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
 		}
+	if (itemType == ITEM_MUSHROOM_GREEN) {
+		obj = new CMushRoom(ITEM_MUSHROOM_GREEN);
+		ani_set_id = ITEM_MUSHROOM_ANI_SET_ID;
+		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+		obj->SetAnimationSet(ani_set);
+	}
 	return obj;
+}
+void QuestionBrick::startPushedUp() {
+	isBeingPushedUp = true;
+	vy = -QUESTIONBRICK_SPEED;
+}
+void QuestionBrick::stopPushedUp() {
+	isBeingPushedUp = false;
+	isFallingDown = true;
+	vy = QUESTIONBRICK_SPEED;
 }
 
 void QuestionBrick::SetState(int state) {
@@ -170,5 +198,9 @@ void QuestionBrick::SetState(int state) {
 	case QUESTION_BRICK_NORMAL:
 		vy = 0;
 		break;
-	}
+	case QUESTION_BRICK_HIT:
+		if (totalItems > 0) startPushedUp();
+		startPushedUp();
+		break;
+	}	
 }

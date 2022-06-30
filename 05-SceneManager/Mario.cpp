@@ -173,6 +173,7 @@ void CMario::OnCollisionWithMushRoom(LPCOLLISIONEVENT e)
 	CMushRoom* mushRoom = dynamic_cast<CMushRoom*>(e->obj);
 	mushRoom->Delete();
 	AddScore(this->x, this->y, 100);
+	if (mushRoom->GetTypeMushRoom() != MUSHROOM_GREEN)
 	SetLevel(MARIO_LEVEL_BIG);
 }
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e) {
