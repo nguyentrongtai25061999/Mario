@@ -19,6 +19,7 @@ void CWorldMapObject::Render()
 void CWorldMapObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
+	x += vx * dt;
 	if (tag == OBJECT_TYPE_HAMMER && x >= HAMMER_LIMIT_X)
 		vx = -vx;
 	if (tag == OBJECT_TYPE_HAMMER && x <= HAMMER_LIMIT_X - OBJECT_BBOX_WIDTH * 4)

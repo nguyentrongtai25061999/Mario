@@ -25,5 +25,6 @@ start	5
 110	Resources\Textures\mario-right.png
 120	Resources\Textures\WorldMap.png
 130	Resources\Textures\Panel.png
+95	Resources\Textures\WorldMapOb.png    
 #extra_map
 31	Resources\Tilemap\world1-1-1_bank.png

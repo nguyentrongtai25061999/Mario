@@ -12,11 +12,14 @@
 #define PIRANHAPLANT_STATE_INACTIVE				300
 #define PIRANHAPLANT_ACTIVE_RANGE				20
 #define PIRANHAPLANT_BITING_TIME				1000
+#define PIRANHAPLANT_STATE_DEATH				200
+#define PIRANHAPLANT_DIYING_TIME				250
 
 class PiranhaPlant :
 	public CGameObject
 {
 	ULONGLONG biting_start = 0;
+	ULONGLONG dying_start = 0;
 	float limitY = 0;
 public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
@@ -27,5 +30,6 @@ public:
 	virtual int IsBlocking() { return 0; }
 	void SetLimitY(float ly) { limitY = ly - PIRANHAPLANT_BBOX_HEIGHT; DebugOut(L"LimitY::%f\n", limitY); }
 	void StartBitting() { biting_start = GetTickCount64(); }
+	void StartDying() { dying_start = GetTickCount64(); }
 	PiranhaPlant();
 };

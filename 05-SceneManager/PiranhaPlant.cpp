@@ -13,11 +13,15 @@ void PiranhaPlant::GetBoundingBox(float& left, float& top,
 
 PiranhaPlant::PiranhaPlant()
 {
-	SetState(PIRANHAPLANT_STATE_DARTING);
+	SetState(PIRANHAPLANT_STATE_INACTIVE);
 }
 
 void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
+	if (GetTickCount64() - dying_start >= PIRANHAPLANT_DIYING_TIME && dying_start != 0)
+		isDeleted = true;
+	if (state == PIRANHAPLANT_STATE_DEATH)
+		return;
 	if (y <= limitY && vy < 0)
 	{
 		y = limitY;
@@ -64,6 +68,16 @@ void PiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				|| ceil(mario->x) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
 				&& state == PIRANHAPLANT_STATE_INACTIVE && biting_start == 0)
 				SetState(PIRANHAPLANT_STATE_DARTING);
+			//! Die
+			if (mario->GetLevel() == MARIO_LEVEL_TAIL) {
+				mario->tail->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+
+				if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->isTuring) {
+					mario->AddScore(x, y, 100);
+					SetState(PIRANHAPLANT_STATE_DEATH);
+					mario->tail->ShowHitEffect();
+				}
+			}
 	}
 }
 
@@ -85,6 +99,10 @@ void PiranhaPlant::SetState(int _state)
 		case PIRANHAPLANT_STATE_BITING:
 			vy = 0;
 			StartBitting();
+			break;
+		case PIRANHAPLANT_STATE_DEATH:
+			vy = 0;
+			StartDying();
 			break;
 		case PIRANHAPLANT_STATE_INACTIVE:
 			vy = 0;
