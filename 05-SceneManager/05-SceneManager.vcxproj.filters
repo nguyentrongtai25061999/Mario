@@ -70,6 +70,9 @@
     <Filter Include="Map Objects\Enemies\Items\Switch">
       <UniqueIdentifier>{c0a96089-5437-4885-98ad-5506bd8a9f8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\WorldMap">
+      <UniqueIdentifier>{d0a504e0-8ff4-4e3d-a5bd-ce8dd7912c4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -174,6 +177,9 @@
     </ClCompile>
     <ClCompile Include="WorldScene.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldPlayer.cpp">
+      <Filter>Map Objects\WorldMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +290,9 @@
     </ClInclude>
     <ClInclude Include="WorldScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldPlayer.h">
+      <Filter>Map Objects\WorldMap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

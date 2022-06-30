@@ -11,6 +11,7 @@ using namespace std;
 CWorldScene::CWorldScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
+	key_handler = new CWorldSceneKeyHandler(this);
 }
 void CWorldScene::_ParseSection_SPRITES(string line)
 {
@@ -101,6 +102,22 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	CGameObject* obj = NULL;
+	switch (object_type)
+	{
+	case OBJECT_TYPE_PLAYER:
+		if (player != NULL)
+		{
+			//DebugOut(L"[ERROR] PLAYER object was created before!\n");
+			return;
+		}
+		obj = new CWorldPlayer(x, y);
+		player = (CWorldPlayer*)obj;
+		//DebugOut(L"[INFO] Player object created! %f %f\n", x, y);
+		break;
+	default:
+		//DebugOut(L"[ERR0R] Invalid object type: %d\n", object_type);
+		return;
+	}
 	// General object setup
 	obj->SetPosition(x, y);
 
@@ -202,6 +219,7 @@ void CWorldScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Update(dt, &coObjects);
+	if (player == NULL) return;
 }
 void CWorldScene::Render()
 {
@@ -221,11 +239,40 @@ void CWorldScene::Unload()
 
 	delete current_map;
 
-
+	player = nullptr;
 	current_map = nullptr;
 	CSprites::GetInstance()->Clear();
 	CAnimations::GetInstance()->Clear();
 	CAnimationSets::GetInstance()->Clear();
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
+}
+void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
+{
+	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+
+	CWorldPlayer* player = ((CWorldScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+	if (player != NULL)
+	{
+		switch (KeyCode)
+		{
+		case DIK_RIGHT:
+			if (player->cgRight)
+				player->SetState(PLAYER_STATE_RIGHT);
+			break;
+		case DIK_LEFT:
+			if (player->cgLeft)
+				player->SetState(PLAYER_STATE_LEFT);
+			break;
+		case DIK_UP:
+			if (player->cgUp)
+				player->SetState(PLAYER_STATE_UP);
+			break;
+		case DIK_DOWN:
+			if (player->cgDown)
+				player->SetState(PLAYER_STATE_DOWN);
+			break;
+		}
+	}
 }
