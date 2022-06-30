@@ -14,6 +14,7 @@
 #define PIRANHAPLANT_BITING_TIME				1000
 #define PIRANHAPLANT_STATE_DEATH				200
 #define PIRANHAPLANT_DIYING_TIME				250
+#define PIRANHAPLANT_ANI_DEATH					1
 
 class PiranhaPlant :
 	public CGameObject

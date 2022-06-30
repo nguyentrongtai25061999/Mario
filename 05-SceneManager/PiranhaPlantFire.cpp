@@ -2,15 +2,16 @@
 #include "PlayScene.h"
 #include "FireBullet.h"
 #include "Mario.h"
+#include "PiranhaPlant.h"
 PiranhaPlantFire::PiranhaPlantFire(int tag) {
 	this->tag = tag;
-	SetState(PIRANHAPLANT_STATE_DARTING);
+	SetState(PIRANHAPLANT_STATE_INACTIVE);
 }
 
 void PiranhaPlantFire::Render()
 {
-	int ani = PIRANHAPLANT_STATE_DARTING;
-	if (state == PIRANHAPLANT_STATE_DARTING)
+	int ani = PIRANHAPLANT_ANI_DEATH;
+	if (state != PIRANHAPLANT_STATE_DEATH && dying_start == 0)
 	{
 		if (Up)
 			if (Right)
@@ -36,6 +37,7 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	CGameObject::Update(dt);
 	y += vy * dt;
+	GetDirect();
 	if (y <= limitY && vy < 0)
 	{
 		y = limitY;
@@ -70,10 +72,20 @@ void PiranhaPlantFire::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (mario != NULL) {
 		float mLeft, mTop, mRight, mBottom;
 		float mWidth = mario->GetWidth();
-		if ((floor(mario->x) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
-			|| ceil(mario->x) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
-			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0)
+		if (x - 60 <= floor(mario->x)
+			&& floor(mario->x) + (float)mWidth <= x
+			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0
+			&& !isMarioInActiveZone
+			|| floor(mario->x) > x && floor(mario->x) < x + PIRANHAPLANT_BBOX_WIDTH + 60
+			&& state == PIRANHAPLANT_STATE_INACTIVE && delay_start == 0
+			&& !isMarioInActiveZone)
+		{
 			SetState(PIRANHAPLANT_STATE_DARTING);
+			isMarioInActiveZone = true;
+		}
+		if (floor(mario->x) < x - 60 || floor(mario->x) > x + PIRANHAPLANT_BBOX_WIDTH + 60) {
+			isMarioInActiveZone = false;
+		}
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom)) {
 			mario->HandleBasicMarioDie();
@@ -132,3 +144,20 @@ void PiranhaPlantFire::Shoot() {
 	bullet->SetAnimationSet(ani_set);
 	currentScene->AddObject(bullet);
 }
+void PiranhaPlantFire::GetDirect() {
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	int mHeight;
+	if (mario->GetLevel() == MARIO_LEVEL_SMALL)
+		mHeight = MARIO_SMALL_BBOX_HEIGHT;
+	else
+		mHeight = MARIO_BIG_BBOX_HEIGHT;
+
+	if (mario->y + mHeight < limitY + BBHeight)
+		Up = true;
+	else
+		Up = false;
+	if (mario->x <= x)
+		Right = false;
+	else
+		Right = true;
+};

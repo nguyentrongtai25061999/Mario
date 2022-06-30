@@ -21,8 +21,7 @@
 #define PIRANHAPLANT_STATE_DEATH				200
 #define PIRANHAPLANT_DIYING_TIME		250
 
-class PiranhaPlantFire :
-	public PiranhaPlant
+class PiranhaPlantFire :public PiranhaPlant
 {
 	ULONGLONG shooting_start = 0;
 	ULONGLONG aim_start = 0;
@@ -32,6 +31,7 @@ class PiranhaPlantFire :
 	bool Up = false;
 	bool Right = false;
 	int BBHeight = 0;
+	bool isMarioInActiveZone = false;
 	FireBullet* bullet = NULL;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
@@ -55,4 +55,5 @@ public:
 		else BBHeight = PIRANHAPLANT_RED_BBOX_HEIGHT;
 		limitY = ly - BBHeight;
 	}
+	void GetDirect();
 };
