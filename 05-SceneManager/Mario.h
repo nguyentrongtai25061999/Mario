@@ -23,7 +23,7 @@
 #define MARIO_FLY_SPEED				0.135f
 #define MARIO_JUMP_DEFLECT_SPEED	0.1f
 #define MARIO_JUMP_DEFLECT_INTRO	0.35f
-#define MARIO_GRAVITY				0.0005f
+#define MARIO_GRAVITY				0.0007f
 #define MARIO_DIE_DEFLECT_SPEED		0.3f
 #define MARIO_RUN_SPEED_MAX			0.3f
 #define MARIO_BULLET_MAX			20
@@ -58,7 +58,7 @@
 
 #define MARIO_DEFAULT_LIFES			4
 
-#define MARIO_WALKING_SPEED		0.07f
+#define MARIO_WALKING_SPEED		0.06f
 #define MARIO_RUNNING_SPEED		0.09f
 
 #define MARIO_ACCEL_WALK_X	0.0005f
@@ -409,7 +409,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
@@ -463,7 +463,7 @@ public:
 		isPipeDown = true;
 	}
 	//travel to secret map
-	void Travel() { x = 2275; y = 0; };
+	void Travel() { x = 1500; y = 0; };
 	void StopPipeUp() {
 		pipeUpTimer = 0;
 		isPipeUp = false;

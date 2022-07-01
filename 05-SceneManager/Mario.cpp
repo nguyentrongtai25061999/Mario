@@ -947,8 +947,8 @@ void CMario::SetState(int state)
 				StartTailFlying();
 			}
 			else {
-				isFlying = true;
-				StartFlying();
+				/*isFlying = true;
+				StartFlying();*/
 			}
 		}
 		normalFlyPullDown = false;

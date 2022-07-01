@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Map.h"
 #include "WorldPlayer.h"
+#include "HUD.h"
 
 #define OBJECT_TYPE_PLAYER 0
 #define OBJECT_TYPE_STOP 2
@@ -14,6 +15,7 @@ class CWorldScene : public CScene
 protected:
 	CWorldPlayer* player = NULL;
 	CMap* current_map = NULL;
+	HUD* hud;
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_SPRITES(string line);
@@ -31,6 +33,7 @@ public:
 	virtual void Unload();
 	CMap* GetMap() { return current_map; }
 	CWorldPlayer* GetPlayer() { return player; }
+	HUD* GetHUD() { return hud; }
 	//friend class CWorldSceneKeyHandler;
 };
 

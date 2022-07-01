@@ -16,6 +16,7 @@ CWorldScene::CWorldScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	key_handler = new CWorldSceneKeyHandler(this);
+	hud = NULL;
 }
 void CWorldScene::_ParseSection_SPRITES(string line)
 {
@@ -221,6 +222,8 @@ void CWorldScene::Load()
 	}
 
 	f.close();
+	hud = new HUD(WORLDSCENE_HUD);
+	hud->SetPosition(130, current_map->GetMapHeight() + 10);
 }
 
 void CWorldScene::Update(DWORD dt)
@@ -251,6 +254,7 @@ void CWorldScene::Render()
 	current_map->DrawMap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	hud->Render();
 }
 
 /*
@@ -263,6 +267,7 @@ void CWorldScene::Unload()
 	objects.clear();
 
 	delete current_map;
+	delete hud;
 
 	player = nullptr;
 	current_map = nullptr;
